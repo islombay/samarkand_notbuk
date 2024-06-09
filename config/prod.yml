@@ -1,7 +1,7 @@
 server:
   host: "0.0.0.0"
   port: 10000
-  public_host: notbuk-seller-islombay.koyeb.app:8345
+  public_host: samarkand-notbuk.onrender.com
 
 db:
   host: ep-late-shadow-a12pujze.ap-southeast-1.pg.koyeb.app
