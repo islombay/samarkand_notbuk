@@ -3,8 +3,8 @@ swag:
 
 swag-install:
 	[ -d "api/docs" ] && echo "Directory exists" || (echo "Directory does not exist, creating"; mkdir "api/docs")
-	$(go) get -u github.com/swaggo/swag/cmd/swag@v1.16.3
-	$(go) install github.com/swaggo/swag/cmd/swag@v1.16.3
+	go get -u github.com/swaggo/swag/cmd/swag@v1.16.3
+	go install github.com/swaggo/swag/cmd/swag@v1.16.3
 
 run-server:
 	go run cmd/main.go
@@ -14,8 +14,8 @@ db:
 
 run: swag run-server
 build:
-	$(go) mod tidy
-	$(go) build -o app cmd/main.go
+	go mod tidy
+	go build -o app cmd/main.go
 
 # for server
 install: swag-install swag build
