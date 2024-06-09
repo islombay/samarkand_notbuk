@@ -1,4 +1,5 @@
 .env
 .idea/
-api/docs
+api/docs/swagger.json
+api/docs/swagger.yaml
 app
