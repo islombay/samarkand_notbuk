@@ -6,6 +6,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/islombay/noutbuk_seller/api/models"
+	"github.com/islombay/noutbuk_seller/api/status"
+	"github.com/islombay/noutbuk_seller/pkg/auth"
 )
 
 // LoginAdmin
@@ -28,5 +30,29 @@ func (v1 *Handler) LoginAdmin(c *gin.Context) {
 	defer cancel()
 
 	res := v1.service.Auth().LoginAdmin(ctx, m)
+	v1.response(c, res)
+}
+
+// GetAccessToken
+// @id 				GetAccessToken
+// @router			/api/v1/auth/access_token [get]
+// @summary			Get new access token
+// @description 	Get new access token
+// @tags			auth
+// @security		ApiKeyAuth
+// @accept			json
+// @produce			json
+func (v1 *Handler) GetAccessToken(c *gin.Context) {
+	token, exists := GetContextValue[*auth.Token](c, "token")
+	if !exists {
+		v1.response(c, status.StatusInternal)
+		v1.log.Error("token does not exist in context")
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+
+	res := v1.service.Auth().GetAccessToken(ctx, *token)
 	v1.response(c, res)
 }

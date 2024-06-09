@@ -33,7 +33,11 @@ func (v1 *Handler) Ping(c *gin.Context) {
 }
 
 func (v1 *Handler) response(c *gin.Context, data status.Status) {
-	c.JSON(data.Code, data)
+	if data.Code >= 200 && data.Code < 300 {
+		c.JSON(data.Code, data)
+		return
+	}
+	c.AbortWithStatusJSON(data.Code, data)
 }
 
 func (v1 *Handler) ValidateError(c *gin.Context, err error, class interface{}) {
@@ -54,6 +58,7 @@ func (v1 *Handler) ValidateError(c *gin.Context, err error, class interface{}) {
 		v1.response(c, v)
 		return
 	}
+	v1.log.Error("could not validateError on handler", logs.Error(err))
 	v1.response(c, status.StatusInternal)
 }
 

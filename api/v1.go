@@ -19,6 +19,7 @@ func NewV1(
 	auth := v1.Group("/auth")
 	{
 		auth.POST("/login_admin", handler.LoginAdmin)
+		auth.GET("/access_token", handler.IsRefreshToken(), handler.GetAccessToken)
 	}
 
 	category := v1.Group("/category")

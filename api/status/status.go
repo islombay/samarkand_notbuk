@@ -56,6 +56,9 @@ var (
 )
 
 func (s Status) AddError(key, value string) Status {
+	if s.Error == nil {
+		s.Error = map[string]string{}
+	}
 	s.Error[key] = value
 	return s
 }

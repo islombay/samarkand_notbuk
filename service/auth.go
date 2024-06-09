@@ -50,14 +50,52 @@ func (srv *Auth) LoginAdmin(ctx context.Context, req models.Login) status.Status
 		Role:   auth.RoleAdmin,
 	}
 
-	token, err := auth.GenerateToken(tkn)
+	access_token, err := auth.GenerateToken(tkn)
 	if err != nil {
-		srv.log.Error("could not generate token", logs.Error(err))
+		srv.log.Error("could not generate access token", logs.Error(err))
+		return status.StatusInternal
+	}
+
+	refresh_token, err := auth.GenerateTokenRefresh(tkn)
+	if err != nil {
+		srv.log.Error("could not generate refresh token", logs.Error(err))
 		return status.StatusInternal
 	}
 
 	st := status.StatusTokenResponse
-	st.Data = token
+	st.Data = map[string]string{
+		"access_token":  access_token,
+		"refresh_token": refresh_token,
+	}
 
 	return st
+}
+
+func (srv *Auth) GetAccessToken(ctx context.Context, req auth.Token) status.Status {
+	token := auth.Token{}
+
+	if req.Role == auth.RoleAdmin {
+		user, err := srv.storage.User().GetStaffByID(ctx, req.UserID)
+		if err != nil {
+			if errors.Is(err, storage.ErrNotFound) {
+				return status.StatusUnauthorized
+			}
+			return status.StatusInternal
+		}
+
+		token.UserID = user.ID
+		token.Role = req.Role
+	}
+
+	access_token, err := auth.GenerateToken(token)
+	if err != nil {
+		srv.log.Error("could not generate access token", logs.Error(err))
+		return status.StatusInternal
+	}
+
+	return status.StatusTokenResponse.AddData(
+		map[string]string{
+			"access_token": access_token,
+		},
+	)
 }

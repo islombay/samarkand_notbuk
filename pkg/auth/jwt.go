@@ -10,8 +10,9 @@ import (
 )
 
 type Token struct {
-	UserID string
-	Role   string
+	UserID string `json:"user_id"`
+	Role   string `json:"role,omitempty"`
+	Type   string `json:"type,omitempty"`
 	jwt.RegisteredClaims
 }
 
@@ -24,16 +25,44 @@ var (
 var (
 	RoleClient = "client"
 	RoleAdmin  = "admin"
+
+	TokenAccess  = "access"
+	TokenRefresh = "refresh"
 )
 
-const TokenExpireLife = 200
+const (
+	TokenRefreshExpireLife = 200
+	TokenAccessExpireLife  = 2
+)
 
 func GenerateToken(t Token) (string, error) {
-	duration := time.Hour * TokenExpireLife
+	duration := time.Hour * TokenAccessExpireLife
+
 	claims := Token{
-		t.UserID,
-		t.Role,
-		jwt.RegisteredClaims{
+		UserID: t.UserID,
+		// Type:   TokenAccess,
+		Role: t.Role,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(duration)),
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	tokenString, err := token.SignedString([]byte(os.Getenv("secret")))
+	if err != nil {
+		return "", err
+	}
+	return tokenString, nil
+}
+
+func GenerateTokenRefresh(t Token) (string, error) {
+	duration := time.Hour * TokenRefreshExpireLife
+	claims := Token{
+		UserID: t.UserID,
+		Type:   TokenRefresh,
+		Role:   t.Role,
+		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(duration)),
 		},
 	}
