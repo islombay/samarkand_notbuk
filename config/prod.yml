@@ -1,0 +1,26 @@
+server:
+  host: localhost
+  port: 8345
+  public_host: localhost:8345
+
+db:
+  host: localhost
+  port: 5432
+  dbname: samarkand_notbuk_sayt
+  sslmode: disabled
+  migrations: migrations
+
+redis:
+  host: localhost
+  port: 2345
+
+filestorage:
+  url: https://example.com
+
+media:
+  category_photo_max_size: 3  #mb
+
+  product_photo_max_size:  3  #mb
+  product_max_photo_count: 3  #mb
+  product_max_video_count: 3  #mb
+  product_video_max_size:  3  #mb
