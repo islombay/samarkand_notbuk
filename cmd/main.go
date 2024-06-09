@@ -53,13 +53,16 @@ func main() {
 	tickerPing := time.NewTicker(2 * time.Minute)
 
 	log.Debug("setting picker for ping")
+
+	var pingURL string
+	if cfg.ENV == config.ProdMode {
+		pingURL = fmt.Sprintf("https://%s/ping", cfg.Server.Public)
+	} else {
+		pingURL = fmt.Sprintf("http://%s/ping", cfg.Server.Public)
+	}
 	go func() {
 		for range tickerPing.C {
-			sendRequest(
-				fmt.Sprintf("http://%s/%s",
-					cfg.Server.Public,
-					"ping",
-				))
+			sendRequest(pingURL)
 		}
 	}()
 
