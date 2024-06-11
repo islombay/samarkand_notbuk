@@ -71,6 +71,60 @@ func (srv *Auth) LoginAdmin(ctx context.Context, req models.Login) status.Status
 	return st
 }
 
+func (srv *Auth) Login(ctx context.Context, req models.Login) status.Status {
+	if !helper.IsValidPhone(req.PhoneNumber) {
+		return status.StatusBadPhone
+	}
+
+	// /auth/login
+	// {
+	//	"phone_number": ""
+	// "header device_id": ""
+	// }
+	//	create user with phone number if not exists
+	//	if redis (device_id and user_id) exists:
+	//		return request_id
+	//	else:
+	//		send sms code to phone number
+	//		set redis (request_id user_id code, need_phone:true device_id)
+	//		return request_id
+	//	GOTO: /verify
+
+	// /auth/verify
+	// {
+	//	"request_id",
+	//	"code"
+	// }
+	//	get redis (by request_id)
+	//	if user.code == redis.code:
+	//		if user.name not set:
+	//			return code:201 request_id
+	//		if user.name set:
+	//			return access_token refresh_token code:200
+	//	else:
+	//		return bad code code:406
+	//	}
+
+	// /auth/profile
+	// {
+	// "request_id",
+	//	"first_name",
+	//	"last_name"
+	// }
+	//	get redis (by request_id)
+	//	if redis.
+
+	_, err := srv.storage.User().GetClientByPhoneNumber(ctx, req.PhoneNumber)
+	if err != nil {
+		if errors.Is(err, storage.ErrNotFound) {
+			return status.StatusUnauthorized
+		}
+		return status.StatusInternal
+	}
+
+	return status.Status{}
+}
+
 func (srv *Auth) GetAccessToken(ctx context.Context, req auth.Token) status.Status {
 	token := auth.Token{}
 

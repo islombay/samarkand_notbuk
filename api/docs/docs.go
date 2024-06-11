@@ -37,6 +37,34 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/api/v1/auth/login": {
+            "post": {
+                "description": "Login as client",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Login as client",
+                "operationId": "Login",
+                "parameters": [
+                    {
+                        "description": "Login request",
+                        "name": "login",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Login"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/api/v1/auth/login_admin": {
             "post": {
                 "description": "Login as admin",

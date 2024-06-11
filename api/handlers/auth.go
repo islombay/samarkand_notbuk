@@ -33,6 +33,29 @@ func (v1 *Handler) LoginAdmin(c *gin.Context) {
 	v1.response(c, res)
 }
 
+// Login
+// @id 				Login
+// @router			/api/v1/auth/login [post]
+// @summary			Login as client
+// @description 	Login as client
+// @tags			auth
+// @accept			json
+// @produce			json
+// @param			login body models.Login		true "Login request"
+func (v1 *Handler) Login(c *gin.Context) {
+	var m models.Login
+	if err := c.BindJSON(&m); err != nil {
+		v1.ValidateError(c, err, m)
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+
+	res := v1.service.Auth().Login(ctx, m)
+	v1.response(c, res)
+}
+
 // GetAccessToken
 // @id 				GetAccessToken
 // @router			/api/v1/auth/access_token [get]

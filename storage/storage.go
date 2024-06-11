@@ -22,6 +22,8 @@ type StorageInterface interface {
 type UserI interface {
 	GetStaffByPhoneNumber(context.Context, string) (*models.Staff, error)
 	GetStaffByID(context.Context, string) (*models.Staff, error)
+
+	GetClientByPhoneNumber(context.Context, string) (*models.Client, error)
 }
 
 type CategoryI interface {
