@@ -58,7 +58,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Login"
+                            "$ref": "#/definitions/models.LoginClient"
                         }
                     }
                 ],
@@ -863,6 +863,17 @@ const docTemplate = `{
                 "password": {
                     "type": "string"
                 },
+                "phone_number": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.LoginClient": {
+            "type": "object",
+            "required": [
+                "phone_number"
+            ],
+            "properties": {
                 "phone_number": {
                     "type": "string"
                 }

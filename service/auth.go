@@ -10,16 +10,18 @@ import (
 	"github.com/islombay/noutbuk_seller/pkg/helper"
 	"github.com/islombay/noutbuk_seller/pkg/logs"
 	"github.com/islombay/noutbuk_seller/storage"
+	redisdb "github.com/islombay/noutbuk_seller/storage/redis"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type Auth struct {
 	storage storage.StorageInterface
 	log     logs.LoggerInterface
+	redis   *redisdb.RedisStore
 }
 
-func NewAuth(storage storage.StorageInterface, log logs.LoggerInterface) *Auth {
-	return &Auth{storage: storage, log: log}
+func NewAuth(storage storage.StorageInterface, log logs.LoggerInterface, redis *redisdb.RedisStore) *Auth {
+	return &Auth{storage: storage, log: log, redis: redis}
 }
 
 func (srv *Auth) LoginAdmin(ctx context.Context, req models.Login) status.Status {
@@ -71,7 +73,7 @@ func (srv *Auth) LoginAdmin(ctx context.Context, req models.Login) status.Status
 	return st
 }
 
-func (srv *Auth) Login(ctx context.Context, req models.Login) status.Status {
+func (srv *Auth) Login(ctx context.Context, req models.LoginClient) status.Status {
 	if !helper.IsValidPhone(req.PhoneNumber) {
 		return status.StatusBadPhone
 	}
@@ -112,17 +114,67 @@ func (srv *Auth) Login(ctx context.Context, req models.Login) status.Status {
 	//	"last_name"
 	// }
 	//	get redis (by request_id)
-	//	if redis.
+	//	if redis.need_phone is false:
+	//		set db for redis.user_id ---> first_name and last_name
+	//		return access_token refresh_token
+	//	else:
+	//		return bad request
 
-	_, err := srv.storage.User().GetClientByPhoneNumber(ctx, req.PhoneNumber)
+	var user *models.Client
+	var err error
+
+	user, err = srv.storage.User().GetClientByPhoneNumber(ctx, req.PhoneNumber)
 	if err != nil {
 		if errors.Is(err, storage.ErrNotFound) {
-			return status.StatusUnauthorized
+			user, err = srv.storage.User().CreateClient(ctx, models.Client{
+				PhoneNumber: req.PhoneNumber,
+			})
+			if err != nil {
+				if errors.Is(err, storage.ErrAlreadyExists) {
+
+				} else {
+					return status.StatusInternal
+				}
+			}
+		} else {
+			return status.StatusInternal
 		}
-		return status.StatusInternal
 	}
 
-	return status.Status{}
+	redisFound := true
+
+	var redisCode *redisdb.Code
+
+	redisCode, err = srv.redis.OTP().GetCode(ctx, user.PhoneNumber)
+	if err != nil {
+		if errors.Is(err, redisdb.ErrKeyNotFound) {
+			redisFound = false
+		} else {
+			return status.StatusInternal
+		}
+	}
+
+	if !redisFound {
+		tmpCode := auth.GenerateRandomPassword(6)
+
+		redisCode, err = srv.redis.OTP().SetCode(ctx, redisdb.SetCodeRequest{
+			UserID:      user.ID,
+			PhoneNumber: user.PhoneNumber,
+			Code:        tmpCode,
+		})
+
+		if err != nil {
+			return status.StatusInternal
+		}
+	}
+
+	// TODO: if not, send sms code
+
+	return status.StatusOk.AddData(
+		map[string]string{
+			"request_id": redisCode.RequestID,
+		},
+	)
 }
 
 func (srv *Auth) GetAccessToken(ctx context.Context, req auth.Token) status.Status {

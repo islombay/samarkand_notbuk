@@ -1,8 +1,10 @@
 package service
 
 import (
+	"github.com/islombay/noutbuk_seller/config"
 	"github.com/islombay/noutbuk_seller/pkg/logs"
 	"github.com/islombay/noutbuk_seller/storage"
+	redisdb "github.com/islombay/noutbuk_seller/storage/redis"
 )
 
 type ServiceInterface interface {
@@ -15,6 +17,7 @@ type ServiceInterface interface {
 type Service struct {
 	storage storage.StorageInterface
 	log     logs.LoggerInterface
+	redis   *redisdb.RedisStore
 
 	auth     *Auth
 	category *Category
@@ -22,20 +25,24 @@ type Service struct {
 	seller   *Seller
 }
 
-func New(storage storage.StorageInterface, log logs.LoggerInterface) ServiceInterface {
+func New(storage storage.StorageInterface, log logs.LoggerInterface, cfg config.Config) ServiceInterface {
 	srv := Service{storage: storage, log: log}
 
-	srv.auth = NewAuth(storage, log)
+	redis := redisdb.NewRedisStore(&cfg.Redis, log)
+
+	srv.auth = NewAuth(storage, log, redis)
 	srv.category = NewCategory(storage, log)
 	srv.brand = NewBrand(storage, log)
 	srv.seller = NewSeller(storage, log)
+
+	srv.redis = redis
 
 	return &srv
 }
 
 func (s *Service) Auth() *Auth {
 	if s.auth == nil {
-		s.auth = NewAuth(s.storage, s.log)
+		s.auth = NewAuth(s.storage, s.log, s.redis)
 	}
 	return s.auth
 }

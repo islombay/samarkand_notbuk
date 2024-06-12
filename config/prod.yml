@@ -11,8 +11,8 @@ db:
   migrations: migrations
 
 redis:
-  host: localhost
-  port: 2345
+  host: "red-cp3e81vsc6pc73fn8qfg"
+  port: "6379"
 
 filestorage:
   url: https://example.com

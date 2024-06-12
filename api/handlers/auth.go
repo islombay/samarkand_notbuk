@@ -41,9 +41,9 @@ func (v1 *Handler) LoginAdmin(c *gin.Context) {
 // @tags			auth
 // @accept			json
 // @produce			json
-// @param			login body models.Login		true "Login request"
+// @param			login body models.LoginClient		true "Login request"
 func (v1 *Handler) Login(c *gin.Context) {
-	var m models.Login
+	var m models.LoginClient
 	if err := c.BindJSON(&m); err != nil {
 		v1.ValidateError(c, err, m)
 		return

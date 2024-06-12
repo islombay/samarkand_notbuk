@@ -3,3 +3,5 @@
 api/docs/swagger.json
 api/docs/swagger.yaml
 app
+
+dump.rdb

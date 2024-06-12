@@ -25,6 +25,7 @@ type UserI interface {
 	GetStaffByID(context.Context, string) (*models.Staff, error)
 
 	GetClientByPhoneNumber(context.Context, string) (*models.Client, error)
+	CreateClient(ctx context.Context, client models.Client) (*models.Client, error)
 }
 
 type CategoryI interface {

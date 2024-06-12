@@ -35,7 +35,7 @@ func main() {
 	storage := postgresql.NewPostgresStore(cfg.DB, log)
 	defer storage.Close()
 
-	services := service.New(storage, log)
+	services := service.New(storage, log, cfg)
 
 	start.Init(cfg.DB, log)
 
