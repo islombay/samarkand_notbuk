@@ -26,6 +26,8 @@ type UserI interface {
 
 	GetClientByPhoneNumber(context.Context, string) (*models.Client, error)
 	CreateClient(ctx context.Context, client models.Client) (*models.Client, error)
+	GetClientByID(context.Context, string) (*models.Client, error)
+	UpdateClient(ctx context.Context, m models.UpdateClient) (*models.Client, error)
 }
 
 type CategoryI interface {

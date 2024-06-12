@@ -8,6 +8,7 @@ import (
 	"github.com/islombay/noutbuk_seller/api/models"
 	"github.com/islombay/noutbuk_seller/api/status"
 	"github.com/islombay/noutbuk_seller/pkg/auth"
+	"github.com/islombay/noutbuk_seller/pkg/helper"
 )
 
 // LoginAdmin
@@ -53,6 +54,62 @@ func (v1 *Handler) Login(c *gin.Context) {
 	defer cancel()
 
 	res := v1.service.Auth().Login(ctx, m)
+	v1.response(c, res)
+}
+
+// VerifyLogin
+// @id 				VerifyLogin
+// @router			/api/v1/auth/verify [post]
+// @summary			Verify login with sms code
+// @description 	Verify login with sms code
+// @tags			auth
+// @accept			json
+// @produce			json
+// @param			login body models.VerifyLogin		true "Verify request"
+func (v1 *Handler) VerifyLogin(c *gin.Context) {
+	var m models.VerifyLogin
+	if err := c.BindJSON(&m); err != nil {
+		v1.ValidateError(c, err, m)
+		return
+	}
+
+	if !helper.IsValidUUID(m.RequestID) {
+		v1.response(c, status.StatusBadID.AddError("request_id", status.ErrInvalid))
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+
+	res := v1.service.Auth().Verify(ctx, m)
+	v1.response(c, res)
+}
+
+// LoginProfile
+// @id 				LoginProfile
+// @router			/api/v1/auth/profile [post]
+// @summary			Add first and last name to profile while authorization
+// @description 	Add first and last name to profile while authorization
+// @tags			auth
+// @accept			json
+// @produce			json
+// @param			login body models.ProfileLogin		true "Profile request"
+func (v1 *Handler) LoginProfile(c *gin.Context) {
+	var m models.ProfileLogin
+	if err := c.BindJSON(&m); err != nil {
+		v1.ValidateError(c, err, m)
+		return
+	}
+
+	if !helper.IsValidUUID(m.RequestID) {
+		v1.response(c, status.StatusBadID.AddError("request_id", status.ErrInvalid))
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+
+	res := v1.service.Auth().Profile(ctx, m)
 	v1.response(c, res)
 }
 

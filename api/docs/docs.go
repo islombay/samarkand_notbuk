@@ -93,6 +93,62 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/api/v1/auth/profile": {
+            "post": {
+                "description": "Add first and last name to profile while authorization",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Add first and last name to profile while authorization",
+                "operationId": "LoginProfile",
+                "parameters": [
+                    {
+                        "description": "Profile request",
+                        "name": "login",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ProfileLogin"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/auth/verify": {
+            "post": {
+                "description": "Verify login with sms code",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Verify login with sms code",
+                "operationId": "VerifyLogin",
+                "parameters": [
+                    {
+                        "description": "Verify request",
+                        "name": "login",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.VerifyLogin"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/api/v1/brand": {
             "get": {
                 "description": "Get brand list",
@@ -879,6 +935,27 @@ const docTemplate = `{
                 }
             }
         },
+        "models.ProfileLogin": {
+            "type": "object",
+            "required": [
+                "first_name",
+                "last_name",
+                "request_id"
+            ],
+            "properties": {
+                "first_name": {
+                    "type": "string",
+                    "maxLength": 40
+                },
+                "last_name": {
+                    "type": "string",
+                    "maxLength": 40
+                },
+                "request_id": {
+                    "type": "string"
+                }
+            }
+        },
         "models.UpdateBrand": {
             "type": "object",
             "required": [
@@ -930,6 +1007,21 @@ const docTemplate = `{
                     "maxLength": 40
                 },
                 "phone_number": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.VerifyLogin": {
+            "type": "object",
+            "required": [
+                "code",
+                "request_id"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "request_id": {
                     "type": "string"
                 }
             }

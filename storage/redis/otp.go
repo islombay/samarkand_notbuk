@@ -30,10 +30,11 @@ type SetCodeRequest struct {
 }
 
 type Code struct {
-	RequestID string `json:"request_id"`
-	UserID    string `json:"user_id"`
-	NeedPhone bool   `json:"need_phone"`
-	Code      string `json:"code"`
+	RequestID   string `json:"request_id"`
+	UserID      string `json:"user_id"`
+	NeedPhone   bool   `json:"need_phone"`
+	PhoneNumber string `json:"phone_number"`
+	Code        string `json:"code"`
 }
 
 const CodeExpireTime = time.Hour / 4
@@ -44,10 +45,11 @@ func (otp *OTP) validateKey(s string) string {
 
 func (otp *OTP) SetCode(ctx context.Context, req SetCodeRequest) (*Code, error) {
 	code := Code{
-		RequestID: uuid.NewString(),
-		UserID:    req.UserID,
-		NeedPhone: true,
-		Code:      req.Code,
+		RequestID:   uuid.NewString(),
+		UserID:      req.UserID,
+		NeedPhone:   true,
+		Code:        req.Code,
+		PhoneNumber: req.PhoneNumber,
 	}
 	jsonData, err := json.Marshal(&code)
 	if err != nil {
@@ -58,6 +60,18 @@ func (otp *OTP) SetCode(ctx context.Context, req SetCodeRequest) (*Code, error) 
 	err = otp.redis.Set(
 		ctx,
 		otp.validateKey(req.PhoneNumber),
+		jsonData,
+		CodeExpireTime,
+	).Err()
+
+	if err != nil {
+		otp.log.Error("could not set code to redis", logs.Error(err))
+		return nil, err
+	}
+
+	err = otp.redis.Set(
+		ctx,
+		otp.validateKey(code.RequestID),
 		jsonData,
 		CodeExpireTime,
 	).Err()
@@ -88,4 +102,35 @@ func (otp *OTP) GetCode(ctx context.Context, key string) (*Code, error) {
 	}
 
 	return &code, nil
+}
+
+func (otp *OTP) Update(ctx context.Context, key string, code Code) (*Code, error) {
+	jsonData, err := json.Marshal(&code)
+	if err != nil {
+		otp.log.Error("could not marshal redis", logs.Error(err))
+		return nil, err
+	}
+
+	err = otp.redis.Set(
+		ctx,
+		otp.validateKey(key),
+		jsonData,
+		CodeExpireTime,
+	).Err()
+
+	if err != nil {
+		otp.log.Error("could not set code to redis", logs.Error(err))
+		return nil, err
+	}
+
+	return &code, nil
+}
+
+func (otp *OTP) Delete(ctx context.Context, key string) error {
+	_, err := otp.redis.Del(ctx, otp.validateKey(key)).Result()
+	if err != nil {
+		otp.log.Error("could not delete code from redis", logs.Error(err), logs.String("redis-key", key))
+		return err
+	}
+	return nil
 }

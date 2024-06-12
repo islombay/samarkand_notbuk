@@ -16,4 +16,9 @@ var (
 		Code:    http.StatusForbidden,
 		Message: "Forbidden",
 	}
+
+	StatusUserCreated = Status{
+		Code:    http.StatusCreated,
+		Message: "Created",
+	}
 )

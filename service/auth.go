@@ -12,6 +12,7 @@ import (
 	"github.com/islombay/noutbuk_seller/storage"
 	redisdb "github.com/islombay/noutbuk_seller/storage/redis"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 type Auth struct {
@@ -64,11 +65,7 @@ func (srv *Auth) LoginAdmin(ctx context.Context, req models.Login) status.Status
 		return status.StatusInternal
 	}
 
-	st := status.StatusTokenResponse
-	st.Data = map[string]string{
-		"access_token":  access_token,
-		"refresh_token": refresh_token,
-	}
+	st := status.StatusTokenResponse.AddDataMap("access_token", access_token).AddDataMap("refresh_token", refresh_token)
 
 	return st
 }
@@ -175,6 +172,111 @@ func (srv *Auth) Login(ctx context.Context, req models.LoginClient) status.Statu
 			"request_id": redisCode.RequestID,
 		},
 	)
+}
+
+func (srv *Auth) Verify(ctx context.Context, req models.VerifyLogin) status.Status {
+	redisCode, err := srv.redis.OTP().GetCode(ctx, req.RequestID)
+	if err != nil {
+		if errors.Is(err, redisdb.ErrKeyNotFound) {
+			return status.StatusUnauthorized
+		}
+		return status.StatusInternal
+	}
+
+	if redisCode.Code != req.Code {
+		return status.StatusUnauthorized.AddError("code", status.ErrInvalid)
+	}
+
+	user, err := srv.storage.User().GetClientByID(ctx, redisCode.UserID)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			srv.log.Error("could not find the user from redis", logs.String("user_id", redisCode.UserID))
+			return status.StatusUnauthorized
+		}
+		return status.StatusInternal
+	}
+
+	if user.FirstName == "" || user.LastName == "" {
+		redisCode.NeedPhone = false
+		if _, err := srv.redis.OTP().Update(ctx, redisCode.PhoneNumber, *redisCode); err != nil {
+			return status.StatusInternal
+		}
+		if _, err := srv.redis.OTP().Update(ctx, redisCode.RequestID, *redisCode); err != nil {
+			return status.StatusInternal
+		}
+		return status.StatusUserCreated.AddDataMap("request_id", redisCode.RequestID)
+	}
+
+	tkn := auth.Token{
+		UserID: user.ID,
+		Role:   auth.RoleClient,
+	}
+
+	access_token, err := auth.GenerateToken(tkn)
+	if err != nil {
+		srv.log.Error("could not generate access token", logs.Error(err))
+		return status.StatusInternal
+	}
+
+	refresh_token, err := auth.GenerateTokenRefresh(tkn)
+	if err != nil {
+		srv.log.Error("could not generate refresh token", logs.Error(err))
+		return status.StatusInternal
+	}
+
+	st := status.StatusTokenResponse.AddDataMap("access_token", access_token).AddDataMap("refresh_token", refresh_token)
+
+	srv.redis.OTP().Delete(ctx, redisCode.PhoneNumber)
+	srv.redis.OTP().Delete(ctx, redisCode.RequestID)
+
+	return st
+}
+
+func (srv *Auth) Profile(ctx context.Context, req models.ProfileLogin) status.Status {
+	redisCode, err := srv.redis.OTP().GetCode(ctx, req.RequestID)
+	if err != nil {
+		if errors.Is(err, redisdb.ErrKeyNotFound) {
+			return status.StatusUnauthorized
+		}
+		return status.StatusInternal
+	}
+
+	if redisCode.NeedPhone {
+		return status.StatusUnauthorized
+	}
+
+	_, err = srv.storage.User().UpdateClient(ctx, models.UpdateClient{
+		ID:        redisCode.UserID,
+		FirstName: req.FirstName,
+		LastName:  req.LastName,
+	})
+	if err != nil {
+		return status.StatusInternal
+	}
+
+	tkn := auth.Token{
+		UserID: redisCode.UserID,
+		Role:   auth.RoleClient,
+	}
+
+	access_token, err := auth.GenerateToken(tkn)
+	if err != nil {
+		srv.log.Error("could not generate access token", logs.Error(err))
+		return status.StatusInternal
+	}
+
+	refresh_token, err := auth.GenerateTokenRefresh(tkn)
+	if err != nil {
+		srv.log.Error("could not generate refresh token", logs.Error(err))
+		return status.StatusInternal
+	}
+
+	st := status.StatusTokenResponse.AddDataMap("access_token", access_token).AddDataMap("refresh_token", refresh_token)
+
+	srv.redis.OTP().Delete(ctx, redisCode.PhoneNumber)
+	srv.redis.OTP().Delete(ctx, redisCode.RequestID)
+
+	return st
 }
 
 func (srv *Auth) GetAccessToken(ctx context.Context, req auth.Token) status.Status {

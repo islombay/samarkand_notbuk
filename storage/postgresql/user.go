@@ -80,3 +80,29 @@ func (db *UserRepo) CreateClient(ctx context.Context, client models.Client) (*mo
 
 	return &user, nil
 }
+
+func (db *UserRepo) GetClientByID(ctx context.Context, id string) (*models.Client, error) {
+	var user models.Client
+	tx := db.db.Model(&models.Client{ID: id}).Where("deleted_at is null").First(&user)
+	if tx.Error != nil {
+		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
+			return nil, storage.ErrNotFound
+		}
+		db.log.Error("could not get client by id", logs.Error(tx.Error))
+		return nil, tx.Error
+	}
+
+	return &user, nil
+}
+
+func (db *UserRepo) UpdateClient(ctx context.Context, m models.UpdateClient) (*models.Client, error) {
+	if err := db.db.Model(&models.Client{ID: m.ID}).Where("deleted_at is null").Updates(&m).Error; err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return nil, storage.ErrAlreadyExists
+		}
+		db.log.Error("could not update client", logs.Error(err))
+		return nil, err
+	}
+
+	return db.GetClientByID(ctx, m.ID)
+}

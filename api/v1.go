@@ -20,6 +20,9 @@ func NewV1(
 	{
 		auth.POST("/login_admin", handler.LoginAdmin)
 		auth.POST("/login", handler.Login)
+		auth.POST("/verify", handler.VerifyLogin)
+		auth.POST("/profile", handler.LoginProfile)
+
 		auth.GET("/access_token", handler.IsRefreshToken(), handler.GetAccessToken)
 	}
 

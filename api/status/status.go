@@ -68,6 +68,14 @@ func (s Status) AddData(data interface{}) Status {
 	return s
 }
 
+func (s Status) AddDataMap(key, val string) Status {
+	if s.Data == nil {
+		s.Data = map[string]interface{}{}
+	}
+	s.Data.(map[string]interface{})[key] = val
+	return s
+}
+
 func (s Status) AddCode(code int) Status {
 	s.Code = code
 	return s
