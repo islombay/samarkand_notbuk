@@ -41,5 +41,14 @@ func NewV1(
 		brand.GET("/:id", handler.BrandGetByID)
 	}
 
+	seller := v1.Group("/seller")
+	{
+		seller.POST("", handler.MiddlewareIsAdmin(), handler.SellerCreate)
+		seller.DELETE("", handler.MiddlewareIsAdmin(), handler.SellerDelete)
+		seller.PUT("", handler.MiddlewareIsAdmin(), handler.SellerUpdate)
+		seller.GET("", handler.SellerGetList)
+		seller.GET("/:id", handler.SellerGetByID)
+	}
+
 	v1.GET("/ping", handler.Ping)
 }

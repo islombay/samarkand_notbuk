@@ -26,7 +26,7 @@ func (srv *Category) Create(ctx context.Context, req models.CreateCategory) stat
 		parent, err = srv.storage.Category().GetByID(ctx, *req.ParentID)
 		if err != nil {
 			if errors.Is(err, storage.ErrNotFound) {
-				return status.StatusNotFound.AddError("parent_id", "not_found")
+				return status.StatusNotFound.AddError("parent_id", status.ErrNotFound)
 			}
 			return status.StatusInternal
 		}
@@ -74,7 +74,7 @@ func (srv *Category) Update(ctx context.Context, req models.UpdateCategory) stat
 		_, err = srv.storage.Category().GetByID(ctx, *req.ParentID)
 		if err != nil {
 			if errors.Is(err, storage.ErrNotFound) {
-				return status.StatusNotFound.AddError("parent_id", "not_found")
+				return status.StatusNotFound.AddError("parent_id", status.ErrNotFound)
 			}
 			return status.StatusInternal
 		}
@@ -83,7 +83,7 @@ func (srv *Category) Update(ctx context.Context, req models.UpdateCategory) stat
 	category, err := srv.storage.Category().Update(ctx, req)
 	if err != nil {
 		if errors.Is(err, storage.ErrNotFound) {
-			return status.StatusNotFound.AddError("id", "not_found")
+			return status.StatusNotFound.AddError("id", status.ErrNotFound)
 		} else if errors.Is(err, storage.ErrAlreadyExists) {
 			return status.StatusAlreadyExists
 		}

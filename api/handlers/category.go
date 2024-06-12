@@ -39,7 +39,7 @@ func (v1 *Handler) CategoryCreate(c *gin.Context) {
 			m.ParentID = nil
 		} else {
 			if !helper.IsValidUUID(*m.ParentID) {
-				v1.response(c, status.StatusBadID.AddError("parent_id", "invalid"))
+				v1.response(c, status.StatusBadID.AddError("parent_id", status.ErrInvalid))
 				return
 			}
 		}
@@ -116,7 +116,7 @@ func (v1 *Handler) CategoryUpdate(c *gin.Context) {
 	}
 
 	if !helper.IsValidUUID(m.ID) {
-		v1.response(c, status.StatusBadID.AddError("id", "invalid"))
+		v1.response(c, status.StatusBadID.AddError("id", status.ErrInvalid))
 		return
 	}
 
@@ -125,7 +125,7 @@ func (v1 *Handler) CategoryUpdate(c *gin.Context) {
 			m.ParentID = nil
 		} else {
 			if !helper.IsValidUUID(*m.ParentID) {
-				v1.response(c, status.StatusBadID.AddError("parent_id", "invalid"))
+				v1.response(c, status.StatusBadID.AddError("parent_id", status.ErrInvalid))
 				return
 			}
 		}
@@ -157,7 +157,7 @@ func (v1 *Handler) CategoryDelete(c *gin.Context) {
 	}
 
 	if !helper.IsValidUUID(m.ID) {
-		v1.response(c, status.StatusBadID.AddError("id", "invalid"))
+		v1.response(c, status.StatusBadID.AddError("id", status.ErrInvalid))
 		return
 	}
 

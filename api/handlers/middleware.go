@@ -51,7 +51,7 @@ func (v1 *Handler) IsRefreshToken() gin.HandlerFunc {
 		}
 
 		if token.Type != auth.TokenRefresh {
-			v1.response(c, status.StatusBadRequest.AddError("token", "invalid"))
+			v1.response(c, status.StatusBadRequest.AddError("token", status.ErrInvalid))
 			return
 		}
 

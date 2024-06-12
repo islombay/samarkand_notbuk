@@ -558,6 +558,239 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/v1/seller": {
+            "get": {
+                "description": "Get seller list",
+                "tags": [
+                    "seller"
+                ],
+                "summary": "Get seller list",
+                "operationId": "SellerGetList",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "q",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of sellers",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update seller. Update only given values",
+                "tags": [
+                    "seller"
+                ],
+                "summary": "Update seller",
+                "operationId": "BrandUpdate",
+                "parameters": [
+                    {
+                        "description": "Update",
+                        "name": "seller",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UpdateSeller"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "seller",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad id",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create seller",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "seller"
+                ],
+                "summary": "Create seller",
+                "operationId": "SellerCreate",
+                "parameters": [
+                    {
+                        "description": "Create seller request",
+                        "name": "seller",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.CreateSeller"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "seller",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request / Bad id",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "500": {
+                        "description": "Internel server error",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete seller",
+                "tags": [
+                    "seller"
+                ],
+                "summary": "Delete seller",
+                "operationId": "SellerDelete",
+                "parameters": [
+                    {
+                        "description": "Delete",
+                        "name": "id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.DeleteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request / Bad id",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/seller/{id}": {
+            "get": {
+                "description": "Get seller by id",
+                "tags": [
+                    "seller"
+                ],
+                "summary": "Get seller by id",
+                "operationId": "SellerGetByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "seller id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "seller",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid id",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -584,6 +817,28 @@ const docTemplate = `{
                 },
                 "parent_id": {
                     "type": "string"
+                }
+            }
+        },
+        "models.CreateSeller": {
+            "type": "object",
+            "required": [
+                "first_name",
+                "last_name",
+                "phone_number"
+            ],
+            "properties": {
+                "first_name": {
+                    "type": "string",
+                    "maxLength": 40
+                },
+                "last_name": {
+                    "type": "string",
+                    "maxLength": 40
+                },
+                "phone_number": {
+                    "type": "string",
+                    "maxLength": 12
                 }
             }
         },
@@ -642,6 +897,28 @@ const docTemplate = `{
                     "maxLength": 30
                 },
                 "parent_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.UpdateSeller": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "first_name": {
+                    "type": "string",
+                    "maxLength": 40
+                },
+                "id": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string",
+                    "maxLength": 40
+                },
+                "phone_number": {
                     "type": "string"
                 }
             }

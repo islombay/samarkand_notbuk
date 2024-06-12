@@ -17,6 +17,7 @@ type StorageInterface interface {
 	User() UserI
 	Category() CategoryI
 	Brand() BrandI
+	Seller() SellerI
 }
 
 type UserI interface {
@@ -39,5 +40,13 @@ type BrandI interface {
 	GetList(context.Context, models.Pagination) (*models.Pagination, error)
 	GetByID(context.Context, string) (*models.Brand, error)
 	Update(ctx context.Context, m models.UpdateBrand) (*models.Brand, error)
+	Delete(ctx context.Context, id string) error
+}
+
+type SellerI interface {
+	Create(context.Context, models.CreateSeller) (*models.Seller, error)
+	GetList(context.Context, models.Pagination) (*models.Pagination, error)
+	GetByID(context.Context, string) (*models.Seller, error)
+	Update(ctx context.Context, m models.UpdateSeller) (*models.Seller, error)
 	Delete(ctx context.Context, id string) error
 }

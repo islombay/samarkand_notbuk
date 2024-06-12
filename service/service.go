@@ -9,6 +9,7 @@ type ServiceInterface interface {
 	Auth() *Auth
 	Category() *Category
 	Brand() *Brand
+	Seller() *Seller
 }
 
 type Service struct {
@@ -18,6 +19,7 @@ type Service struct {
 	auth     *Auth
 	category *Category
 	brand    *Brand
+	seller   *Seller
 }
 
 func New(storage storage.StorageInterface, log logs.LoggerInterface) ServiceInterface {
@@ -26,6 +28,7 @@ func New(storage storage.StorageInterface, log logs.LoggerInterface) ServiceInte
 	srv.auth = NewAuth(storage, log)
 	srv.category = NewCategory(storage, log)
 	srv.brand = NewBrand(storage, log)
+	srv.seller = NewSeller(storage, log)
 
 	return &srv
 }
@@ -49,4 +52,11 @@ func (s *Service) Brand() *Brand {
 		s.brand = NewBrand(s.storage, s.log)
 	}
 	return s.brand
+}
+
+func (s *Service) Seller() *Seller {
+	if s.seller == nil {
+		s.seller = NewSeller(s.storage, s.log)
+	}
+	return s.seller
 }

@@ -56,7 +56,7 @@ func (srv *Brand) Update(ctx context.Context, req models.UpdateBrand) status.Sta
 	brand, err := srv.storage.Brand().Update(ctx, req)
 	if err != nil {
 		if errors.Is(err, storage.ErrNotFound) {
-			return status.StatusNotFound.AddError("id", "not_found")
+			return status.StatusNotFound.AddError("id", status.ErrNotFound)
 		} else if errors.Is(err, storage.ErrAlreadyExists) {
 			return status.StatusAlreadyExists
 		}

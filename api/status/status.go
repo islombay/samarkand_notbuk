@@ -37,7 +37,7 @@ var (
 		Code:    http.StatusBadRequest,
 		Message: "Invalid phone number",
 		Error: map[string]string{
-			"phone_number": "invalid",
+			"phone_number": string(ErrInvalid),
 		},
 	}
 
@@ -45,7 +45,7 @@ var (
 		Code:    http.StatusBadRequest,
 		Message: "Invalid id",
 		Error: map[string]string{
-			"id": "invalid",
+			"id": string(ErrInvalid),
 		},
 	}
 
@@ -55,11 +55,11 @@ var (
 	}
 )
 
-func (s Status) AddError(key, value string) Status {
+func (s Status) AddError(key string, value StatusError) Status {
 	if s.Error == nil {
 		s.Error = map[string]string{}
 	}
-	s.Error[key] = value
+	s.Error[key] = string(value)
 	return s
 }
 
@@ -77,3 +77,10 @@ func (s Status) AddCount(count int64) Status {
 	s.Count = count
 	return s
 }
+
+type StatusError string
+
+var (
+	ErrInvalid  = StatusError("invalid")
+	ErrNotFound = StatusError("not_found")
+)

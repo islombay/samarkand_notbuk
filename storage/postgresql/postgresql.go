@@ -19,6 +19,7 @@ type Storage struct {
 	user     storage.UserI
 	category storage.CategoryI
 	brand    storage.BrandI
+	seller   storage.SellerI
 
 	db  *gorm.DB
 	log logs.LoggerInterface
@@ -41,6 +42,7 @@ func NewPostgresStore(cfg config.DBConfig, log logs.LoggerInterface) storage.Sto
 	st.user = NewUserRepo(db, log)
 	st.category = NewCategoryRepo(db, log)
 	st.brand = NewBrandRepo(db, log)
+	st.seller = NewSellerRepo(db, log)
 
 	return &st
 }
@@ -58,4 +60,8 @@ func (s *Storage) Category() storage.CategoryI {
 
 func (s *Storage) Brand() storage.BrandI {
 	return s.brand
+}
+
+func (s *Storage) Seller() storage.SellerI {
+	return s.seller
 }
