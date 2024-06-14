@@ -50,8 +50,9 @@ type ServerConfig struct {
 const (
 	filePath = "config"
 
-	LocalMode = "local"
-	ProdMode  = "prod"
+	LocalMode  = "local"
+	ProdMode   = "prod"
+	DockerMode = "docker"
 )
 
 func Load() Config {
@@ -68,6 +69,8 @@ func Load() Config {
 
 	case ProdMode:
 		viper.SetConfigName(ProdMode)
+	case DockerMode:
+		viper.SetConfigName(DockerMode)
 	default:
 		viper.SetConfigName(ProdMode)
 		env = ProdMode

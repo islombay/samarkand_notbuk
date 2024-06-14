@@ -1,0 +1,31 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8345:8345"
+    env_file:
+      - .env
+    environment:
+      - ENV=docker
+    depends_on:
+      - redis
+      - postgres
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+
+  postgres:
+    image: "postgres:alpine"
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PWD}
+      POSTGRES_DB: samarkand_notbuk_sayt
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
