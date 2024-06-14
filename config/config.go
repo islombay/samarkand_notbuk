@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/spf13/viper"
@@ -63,15 +64,16 @@ func Load() Config {
 	viper.AddConfigPath(filePath)
 	env := os.Getenv("ENV")
 
+	fmt.Println(env)
 	switch env {
 	case LocalMode:
 		viper.SetConfigName(LocalMode)
-
 	case ProdMode:
 		viper.SetConfigName(ProdMode)
 	case DockerMode:
 		viper.SetConfigName(DockerMode)
 	default:
+		fmt.Println("default conf")
 		viper.SetConfigName(ProdMode)
 		env = ProdMode
 	}
