@@ -45,6 +45,8 @@ jobs:
           mkdir -p ~/islombay/go/web/samarkand-notbuk
           cd ~/islombay/go/web/samarkand-notbuk
           docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_PROJECTNAME }}:${{ github.sha }}
-          docker stop samarkand-notbuk || true
-          docker rm samarkand-notbuk || true
-          docker run -d --name samarkand-notbuk -p 8345:8345 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_PROJECTNAME }}:${{ github.sha }}
+          docker-compose down
+          docker-compose up
+          # docker stop samarkand-notbuk || true
+          # docker rm samarkand-notbuk || true
+          # docker run -d --name samarkand-notbuk -p 8345:8345 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_PROJECTNAME }}:${{ github.sha }}
