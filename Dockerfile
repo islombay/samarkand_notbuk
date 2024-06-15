@@ -30,7 +30,8 @@ WORKDIR /app
 
 COPY . .
 
-COPY .env .env
+RUN ls -la /app
+# COPY .env .env
 
 # Install make and other necessary packages
 RUN apt-get update && apt-get install -y make
