@@ -5,10 +5,13 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8345:8345"
-    env_file:
-      - .env
     environment:
-      - ENV=docker
+      - ENV='docker'
+      - DB_USER=postgres
+      - DB_PWD=islombay
+      - secret='jwtbirnjaperhubinij9084uiryu03834reuhiwe9iofdnjdkjkln'
+      - REDIS_USER=username
+      - REDIS_PWD='islombay-redis'
     depends_on:
       - redis
       - postgres
