@@ -45,7 +45,7 @@ jobs:
           mkdir -p ~/islombay/go/web/samarkand-notbuk
           cd ~/islombay/go/web/samarkand-notbuk
 
-          git pull origin
+          git pull origin deploy
 
           docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_PROJECTNAME }}:${{ github.sha }}
           docker-compose down
