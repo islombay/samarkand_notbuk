@@ -46,6 +46,7 @@ jobs:
           cd ~/islombay/go/web/samarkand-notbuk
 
           git pull origin deploy
+          git switch deploy
 
           docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_PROJECTNAME }}:${{ github.sha }}
           docker-compose down
