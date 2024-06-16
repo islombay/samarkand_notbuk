@@ -49,4 +49,4 @@ EXPOSE 8345
 
 # Run the application
 # CMD ["./start.sh"]
-CMD ["make start"]
+CMD ["make","start"]
