@@ -64,7 +64,7 @@ func Load() Config {
 	viper.AddConfigPath(filePath)
 	env := os.Getenv("ENV")
 
-	fmt.Println(env)
+	fmt.Println("ENV:", env)
 	switch env {
 	case LocalMode:
 		viper.SetConfigName(LocalMode)
