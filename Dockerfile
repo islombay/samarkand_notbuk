@@ -42,10 +42,11 @@ ENV ENV=docker
 RUN ls -la /app
 
 # Create a script to source the .env file and run the application
-RUN echo "#!/bin/sh\nexport \$(cat .env | xargs)\n./app" > start.sh
-RUN chmod +x start.sh
+# RUN echo "#!/bin/sh\nexport \$(cat .env | xargs)\n./app" > start.sh
+# RUN chmod +x start.sh
 
 EXPOSE 8345
 
 # Run the application
-CMD ["./start.sh"]
+# CMD ["./start.sh"]
+CMD ["make start"]
