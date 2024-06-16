@@ -5,3 +5,4 @@ api/docs/swagger.yaml
 app
 
 dump.rdb
+mocks

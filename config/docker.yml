@@ -1,7 +1,7 @@
 server:
   host: "0.0.0.0"
   port: 8345
-  public_host: "0.0.0.0:8345"
+  public_host: "128.140.40.52:8345"
 
 db:
   host: postgres
