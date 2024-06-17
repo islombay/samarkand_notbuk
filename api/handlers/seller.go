@@ -86,7 +86,7 @@ func (v1 *Handler) SellerGetByID(c *gin.Context) {
 }
 
 // SellerUpdate
-// @id			BrandUpdate
+// @id			SellerUpdate
 // @router		/api/v1/seller [put]
 // @description Update seller. Update only given values
 // @summary		Update seller
