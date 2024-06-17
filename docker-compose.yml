@@ -5,6 +5,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8345:8345"
+    restart: always
     depends_on:
       redis:
         condition: service_started
@@ -12,11 +13,13 @@ services:
         condition: service_healthy
 
   redis:
+    restart: always
     image: "redis:alpine"
     ports:
       - "6379:6379"
 
   postgres:
+    restart: always
     image: "postgres:alpine"
     environment:
       POSTGRES_USER: ${DB_USER}
