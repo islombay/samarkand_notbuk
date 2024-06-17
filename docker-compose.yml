@@ -6,6 +6,8 @@ services:
     ports:
       - "8345:8345"
     restart: always
+    labels:
+      logging: "promtail"
     depends_on:
       redis:
         condition: service_started
