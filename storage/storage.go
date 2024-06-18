@@ -32,7 +32,7 @@ type UserI interface {
 
 type CategoryI interface {
 	Create(context.Context, models.CreateCategory) (*models.Category, error)
-	GetList(context.Context, models.Pagination) (*models.Pagination, error)
+	GetList(context.Context, models.Pagination, bool) (*models.Pagination, error)
 	GetByID(context.Context, string) (*models.Category, error)
 	Update(ctx context.Context, m models.UpdateCategory) (*models.Category, error)
 	Delete(ctx context.Context, id string) error

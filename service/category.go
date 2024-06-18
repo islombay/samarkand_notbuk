@@ -45,8 +45,8 @@ func (srv *Category) Create(ctx context.Context, req models.CreateCategory) stat
 	return status.StatusOk.AddData(category)
 }
 
-func (srv *Category) GetList(ctx context.Context, p models.Pagination) status.Status {
-	pagination, err := srv.storage.Category().GetList(ctx, p)
+func (srv *Category) GetList(ctx context.Context, p models.Pagination, onlySub bool) status.Status {
+	pagination, err := srv.storage.Category().GetList(ctx, p, onlySub)
 	if err != nil {
 		return status.StatusInternal
 	}

@@ -38,10 +38,16 @@ func (db *categoryRepo) Create(ctx context.Context, m models.CreateCategory) (*m
 	return &cat, nil
 }
 
-func (db *categoryRepo) GetList(ctx context.Context, p models.Pagination) (*models.Pagination, error) {
+func (db *categoryRepo) GetList(ctx context.Context, p models.Pagination, onlySub bool) (*models.Pagination, error) {
 	var categories []models.Category
 
-	var tx *gorm.DB = db.db.Where("deleted_at is null and parent_id is null")
+	var tx *gorm.DB = db.db.Where("deleted_at is null")
+
+	if onlySub {
+		tx = tx.Where("parent_id is not null")
+	} else {
+		tx = tx.Where("parent_id is null")
+	}
 
 	if p.Query != "" {
 		tx = tx.Where("name_uz ilike ?", "%"+p.Query+"%")
@@ -65,7 +71,7 @@ func (db *categoryRepo) GetList(ctx context.Context, p models.Pagination) (*mode
 func (db *categoryRepo) GetByID(ctx context.Context, id string) (*models.Category, error) {
 	var category models.Category
 
-	if res := db.db.Preload("Parent").Preload("Subcategories").Where("deleted_at is null").First(&category, "id = ?", id); res.Error != nil {
+	if res := db.db.Preload("Parent").Preload("Subcategories", "deleted_at is null").Where("deleted_at is null").First(&category, "id = ?", id); res.Error != nil {
 		if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 			return nil, storage.ErrNotFound
 		}

@@ -56,10 +56,14 @@ func (v1 *Handler) CategoryCreate(c *gin.Context) {
 // @summary		Get category list
 // @tags		category
 // @param		pagination	query	models.Pagination	false 	"Pagination"
+// @param		only_sub	query	bool				false	"Return only sub category ?"
 // @success		200	{object}	status.Status	"List of categories"
 // @failure		500	{object}	status.Status	"Internal server error"
 func (v1 *Handler) CategoryGetList(c *gin.Context) {
-	var pagination models.Pagination
+	var pagination struct {
+		models.Pagination
+		OnlySub bool `form:"only_sub"`
+	}
 	c.ShouldBind(&pagination)
 
 	pagination.Fix()
@@ -67,7 +71,7 @@ func (v1 *Handler) CategoryGetList(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
 
-	res := v1.service.Category().GetList(ctx, pagination)
+	res := v1.service.Category().GetList(ctx, pagination.Pagination, pagination.OnlySub)
 	v1.response(c, res)
 }
 

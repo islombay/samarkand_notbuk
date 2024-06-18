@@ -405,6 +405,12 @@ const docTemplate = `{
                         "type": "string",
                         "name": "q",
                         "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Return only sub category ?",
+                        "name": "only_sub",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -666,7 +672,7 @@ const docTemplate = `{
                     "seller"
                 ],
                 "summary": "Update seller",
-                "operationId": "BrandUpdate",
+                "operationId": "SellerUpdate",
                 "parameters": [
                     {
                         "description": "Update",
