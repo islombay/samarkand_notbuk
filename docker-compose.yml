@@ -14,6 +14,8 @@ services:
         condition: service_started
       postgres:
         condition: service_healthy
+    volumes:
+      - ./config/docker.yml:/app/config/docker.yml
 
   redis:
     restart: always
