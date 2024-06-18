@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8345:8345"
+      - "127.0.0.1:8345:8345"
     restart: always
     logging:
       driver: "json-file"
