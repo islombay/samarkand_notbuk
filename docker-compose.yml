@@ -16,6 +16,7 @@ services:
         condition: service_healthy
     volumes:
       - ./config/docker.yml:/app/config/docker.yml
+      - ./api/docs/docs.go:/app/api/docs/docs.go
 
   redis:
     restart: always
