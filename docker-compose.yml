@@ -1,47 +1,3 @@
-# services:
-#   app:
-#     image: "${DOCKER_USERNAME}/${DOCKER_PROJECTNAME}:${DOCKER_TAG}"
-#     ports:
-#       - "127.0.0.1:8345:8345"
-#     restart: always
-#     logging:
-#       driver: "json-file"
-      
-#     depends_on:
-#       redis:
-#         condition: service_started
-#       postgres:
-#         condition: service_healthy
-#     volumes:
-#       - ./config/docker.yml:/app/config/docker.yml
-#       - ./api/docs/docs.go:/app/api/docs/docs.go
-
-#   redis:
-#     restart: always
-#     image: "redis:alpine"
-#     ports:
-#       - "6379:6379"
-
-#   postgres:
-#     restart: always
-#     image: "postgres:alpine"
-#     environment:
-#       POSTGRES_USER: ${DB_USER}
-#       POSTGRES_PASSWORD: ${DB_PWD}
-#       POSTGRES_DB: samarkand_notbuk_sayt
-#     ports:
-#       - "5433:5432"
-#     volumes:
-#       - postgres_data:/var/lib/postgresql/data
-#     healthcheck:
-#       test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
-#       interval: 10s
-#       timeout: 5s
-#       retries: 5
-
-# volumes:
-#   postgres_data:
-
 version: '3.8'
 
 services:
@@ -60,6 +16,13 @@ services:
     volumes:
       - ./config/docker.yml:/app/config/docker.yml
       - ./api/docs/docs.go:/app/api/docs/docs.go
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PWD=${DB_PWD}
+      - ENV=docker
+      - secret=${secret}
+      - DOCKER_USERNAME=${DOCKER_USERNAME}
+      - DOCKER_PROJECTNAME=${DOCKER_PROJECTNAME}
 
   redis:
     restart: always
