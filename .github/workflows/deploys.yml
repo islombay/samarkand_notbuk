@@ -61,13 +61,13 @@ jobs:
           mkdir -p ~/islombay/go/web/samarkand-notbuk
           cd ~/islombay/go/web/samarkand-notbuk
 
-          docker pull $DOCKER_USERNAME/$DOCKER_PROJECTNAME:$DOCKER_TAG
+          docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_PROJECTNAME }}:${{ github.sha }}
 
           docker stop samarkand-notbuk || true
           docker rm samarkand-notbuk || true
           docker run -d --name samarkand-notbuk -p 127.0.0.1:8345:8345 \
-            -e DB_USER=$DB_USER \
-            -e DB_PWD=$DB_PWD \
+            -e DB_USER=${{ secrets.DB_USER }} \
+            -e DB_PWD=${{ secrets.DB_PWD }} \
             -e ENV=docker \
-            -e secret=$secret \
-            $DOCKER_USERNAME/$DOCKER_PROJECTNAME:$DOCKER_TAG          
+            -e secret=${{ secrets.secret }} \
+            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_PROJECTNAME }}:${{ github.sha }}          
