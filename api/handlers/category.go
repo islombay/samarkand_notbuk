@@ -75,6 +75,32 @@ func (v1 *Handler) CategoryGetList(c *gin.Context) {
 	v1.response(c, res)
 }
 
+// CategoryGetListSub
+// @id			CategoryGetListSub
+// @router		/api/v1/category/sub [get]
+// @description	Get subcategory list
+// @summary		Get subcategory list
+// @tags		category
+// @param		pagination	query	models.Pagination	false 	"Pagination"
+// @param		only_sub	query	bool				false	"Return only sub category ?"
+// @success		200	{object}	status.Status	"List of categories"
+// @failure		500	{object}	status.Status	"Internal server error"
+func (v1 *Handler) CategoryGetListSub(c *gin.Context) {
+	var pagination struct {
+		models.Pagination
+		OnlySub bool `form:"only_sub"`
+	}
+	c.ShouldBind(&pagination)
+
+	pagination.Fix()
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+
+	res := v1.service.Category().GetList(ctx, pagination.Pagination, true)
+	v1.response(c, res)
+}
+
 // CategoryGetByID
 // @id			CategoryGetByID
 // @router		/api/v1/category/{id} [get]

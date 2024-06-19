@@ -576,6 +576,53 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/category/sub": {
+            "get": {
+                "description": "Get subcategory list",
+                "tags": [
+                    "category"
+                ],
+                "summary": "Get subcategory list",
+                "operationId": "CategoryGetListSub",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "q",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Return only sub category ?",
+                        "name": "only_sub",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of categories",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/category/{id}": {
             "get": {
                 "description": "Get category by id",
