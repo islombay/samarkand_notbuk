@@ -13,6 +13,9 @@ jobs:
       DOCKER_TAG: ${{ github.sha }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PROJECTNAME: ${{ secrets.DOCKER_PROJECTNAME }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PWD: ${{ secrets.DB_PWD }}
+      secret: ${{ secrets.secret }}
 
     steps:
     - name: Checkout code
