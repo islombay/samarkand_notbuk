@@ -77,7 +77,7 @@ func (v1 *Handler) CategoryGetList(c *gin.Context) {
 
 // CategoryGetListSub
 // @id			CategoryGetListSub
-// @router		/api/v1/category/sub [get]
+// @router		/api/v1/subcategory [get]
 // @description	Get subcategory list
 // @summary		Get subcategory list
 // @tags		category

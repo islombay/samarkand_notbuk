@@ -32,9 +32,9 @@ func NewV1(
 		category.DELETE("", handler.MiddlewareIsAdmin(), handler.CategoryDelete)
 		category.PUT("", handler.MiddlewareIsAdmin(), handler.CategoryUpdate)
 		category.GET("", handler.CategoryGetList)
-		category.GET("/sub", handler.CategoryGetListSub)
 		category.GET("/:id", handler.CategoryGetByID)
 	}
+	v1.GET("/subcategory", handler.CategoryGetListSub)
 
 	brand := v1.Group("/brand")
 	{
