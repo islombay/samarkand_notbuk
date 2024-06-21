@@ -21,6 +21,9 @@ services:
       - DB_PWD=${DB_PWD}
       - secret=${secret}
       - ENV=docker
+    labels:
+      - "app=samarkand-notbuk-server"
+      - "service=samarkand-notbuk-server"
 
   redis:
     restart: always
