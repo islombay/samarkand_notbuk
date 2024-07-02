@@ -3,6 +3,8 @@ version: '3.8'
 networks:
   minio_network:
     external: true
+  samarkand-notbuk:
+    external: true
 
 services:
   app:
@@ -30,12 +32,15 @@ services:
       - "service=samarkand-notbuk-server"
     networks:
       - minio_network
+      - samarkand-notbuk
 
   redis:
     restart: always
     image: "redis:alpine"
     ports:
       - "127.0.0.1:6379:6379"
+    networks:
+      - samarkand-notbuk
 
   postgres:
     restart: always
@@ -53,6 +58,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - samarkand-notbuk
 
 volumes:
   postgres_data:
