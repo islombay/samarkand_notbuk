@@ -18,5 +18,7 @@ func (p *Pagination) Fix() {
 		p.Page = 1
 	}
 
+	p.Count = 0
+
 	p.Offset = (p.Page - 1) * p.Limit
 }

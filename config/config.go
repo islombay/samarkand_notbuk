@@ -14,6 +14,13 @@ type Config struct {
 	Media       MediaConfig
 	Server      ServerConfig
 	ENV         string
+	Minio       MinioConfig
+}
+
+type MinioConfig struct {
+	Host string
+	Port int
+	SSL  bool
 }
 
 type DBConfig struct {
@@ -112,6 +119,10 @@ func Load() Config {
 			ProductVideoMaxSize:  viper.GetInt64("media.product_video_max_size"),
 		},
 		ENV: env,
+		Minio: MinioConfig{
+			Host: viper.GetString("minio.host"),
+			Port: viper.GetInt("minio.port"),
+		},
 	}
 	return cfg
 }

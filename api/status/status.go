@@ -2,6 +2,8 @@ package status
 
 import (
 	"net/http"
+
+	"github.com/minio/minio-go/v7"
 )
 
 type Status struct {
@@ -10,7 +12,16 @@ type Status struct {
 	Count   int64             `json:"count,omitempty"`
 	Data    interface{}       `json:"data,omitempty"`
 	Error   map[string]string `json:"error,omitempty"`
+
+	FileObject     *minio.Object    `json:"-"`
+	FileObjectInfo minio.ObjectInfo `json:"-"`
 }
+
+// type File struct {
+// 	name        string
+// 	contentType string
+// 	size        int
+// }
 
 var (
 	StatusOk = Status{
@@ -83,6 +94,16 @@ func (s Status) AddCode(code int) Status {
 
 func (s Status) AddCount(count int64) Status {
 	s.Count = count
+	return s
+}
+
+func (s Status) AddFileObject(obj *minio.Object) Status {
+	s.FileObject = obj
+	return s
+}
+
+func (s Status) AddFileObjectInfo(obj minio.ObjectInfo) Status {
+	s.FileObjectInfo = obj
 	return s
 }
 

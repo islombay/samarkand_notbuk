@@ -576,53 +576,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/category/sub": {
-            "get": {
-                "description": "Get subcategory list",
-                "tags": [
-                    "category"
-                ],
-                "summary": "Get subcategory list",
-                "operationId": "CategoryGetListSub",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "name": "q",
-                        "in": "query"
-                    },
-                    {
-                        "type": "boolean",
-                        "description": "Return only sub category ?",
-                        "name": "only_sub",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "List of categories",
-                        "schema": {
-                            "$ref": "#/definitions/status.Status"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/status.Status"
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/category/{id}": {
             "get": {
                 "description": "Get category by id",
@@ -643,6 +596,183 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "Category",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid id",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/files": {
+            "get": {
+                "description": "Get files list",
+                "tags": [
+                    "files"
+                ],
+                "summary": "Get files list",
+                "operationId": "FileGetList",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "q",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of files",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete file",
+                "tags": [
+                    "files"
+                ],
+                "summary": "Delete file",
+                "operationId": "FileDelete",
+                "parameters": [
+                    {
+                        "description": "Delete",
+                        "name": "id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.DeleteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request / Bad id",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/files/upload": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Upload file",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "files"
+                ],
+                "summary": "Upload file",
+                "operationId": "UploadFile",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "File",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "File info",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "500": {
+                        "description": "Internel server error",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/files/{id}": {
+            "get": {
+                "description": "Get file by id",
+                "tags": [
+                    "files"
+                ],
+                "summary": "Get file by id",
+                "operationId": "FileGetByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "file id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "file",
                         "schema": {
                             "$ref": "#/definitions/status.Status"
                         }
@@ -888,6 +1018,53 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/subcategory": {
+            "get": {
+                "description": "Get subcategory list",
+                "tags": [
+                    "category"
+                ],
+                "summary": "Get subcategory list",
+                "operationId": "CategoryGetListSub",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "q",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Return only sub category ?",
+                        "name": "only_sub",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of categories",
                         "schema": {
                             "$ref": "#/definitions/status.Status"
                         }

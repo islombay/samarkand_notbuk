@@ -17,6 +17,11 @@ redis:
 filestorage:
   url: https://example.com
 
+minio:
+  host: minio
+  port: 9000
+  ssl: false
+
 media:
   category_photo_max_size: 3  #mb
 

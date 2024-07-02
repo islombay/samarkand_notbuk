@@ -54,5 +54,13 @@ func NewV1(
 		seller.GET("/:id", handler.SellerGetByID)
 	}
 
+	files := v1.Group("/files")
+	{
+		files.POST("/upload", handler.MiddlewareIsAdmin(), handler.UploadFile)
+		files.GET("/:id", handler.FileGetByID)
+		files.GET("", handler.FileGetList)
+		files.DELETE("", handler.MiddlewareIsAdmin(), handler.FileDelete)
+	}
+
 	v1.GET("/ping", handler.Ping)
 }

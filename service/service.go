@@ -12,17 +12,20 @@ type ServiceInterface interface {
 	Category() *Category
 	Brand() *Brand
 	Seller() *Seller
+	Files() *Files
 }
 
 type Service struct {
 	storage storage.StorageInterface
 	log     logs.LoggerInterface
+	cfg     config.Config
 	redis   *redisdb.RedisStore
 
 	auth     *Auth
 	category *Category
 	brand    *Brand
 	seller   *Seller
+	files    *Files
 }
 
 func New(storage storage.StorageInterface, log logs.LoggerInterface, cfg config.Config) ServiceInterface {
@@ -34,8 +37,11 @@ func New(storage storage.StorageInterface, log logs.LoggerInterface, cfg config.
 	srv.category = NewCategory(storage, log)
 	srv.brand = NewBrand(storage, log)
 	srv.seller = NewSeller(storage, log)
+	srv.files = NewFiles(storage, log, cfg)
 
 	srv.redis = redis
+
+	srv.cfg = cfg
 
 	return &srv
 }
@@ -66,4 +72,11 @@ func (s *Service) Seller() *Seller {
 		s.seller = NewSeller(s.storage, s.log)
 	}
 	return s.seller
+}
+
+func (s *Service) Files() *Files {
+	if s.files == nil {
+		s.files = NewFiles(s.storage, s.log, s.cfg)
+	}
+	return s.files
 }
