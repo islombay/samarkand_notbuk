@@ -18,7 +18,7 @@ filestorage:
   url: https://example.com
 
 minio:
-  host: minio1
+  host: minio
   port: 9000
   ssl: false
 

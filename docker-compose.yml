@@ -1,5 +1,9 @@
 version: '3.8'
 
+networks:
+  minio_network:
+    external: true
+
 services:
   app:
     image: "${DOCKER_USERNAME}/${DOCKER_PROJECTNAME}:${DOCKER_TAG}"
@@ -24,6 +28,8 @@ services:
     labels:
       - "app=samarkand-notbuk-server"
       - "service=samarkand-notbuk-server"
+    networks:
+      - minio_network
 
   redis:
     restart: always
