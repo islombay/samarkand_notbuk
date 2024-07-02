@@ -27,6 +27,8 @@ services:
       - DB_PWD=${DB_PWD}
       - secret=${secret}
       - ENV=docker
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
     labels:
       - "app=samarkand-notbuk-server"
       - "service=samarkand-notbuk-server"
