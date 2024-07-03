@@ -20,7 +20,7 @@ type CreateSeller struct {
 }
 
 type UpdateSeller struct {
-	ID          string `json:"id" binding:"required"`
+	ID          string `json:"id" binding:"required,uuid"`
 	FirstName   string `json:"first_name" binding:"omitempty,max=40"`
 	LastName    string `json:"last_name" binding:"omitempty,max=40"`
 	PhoneNumber string `json:"phone_number"`

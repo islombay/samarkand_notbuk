@@ -29,7 +29,7 @@ type Staff struct {
 }
 
 type UpdateClient struct {
-	ID        string `js:"id" binding:"required"`
+	ID        string `js:"id" binding:"required,uuid"`
 	FirstName string `json:"first_name" binding:"omitempty,max=40"`
 	LastName  string `json:"last_name" binding:"omitempty,max=40"`
 }

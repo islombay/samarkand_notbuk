@@ -17,11 +17,14 @@ type Status struct {
 	FileObjectInfo minio.ObjectInfo `json:"-"`
 }
 
-// type File struct {
-// 	name        string
-// 	contentType string
-// 	size        int
-// }
+type StatusError string
+
+var (
+	ErrInvalid  = StatusError("invalid")
+	ErrNotFound = StatusError("not_found")
+	ErrBadValue = StatusError("bad_value")
+	ErrUUID     = StatusError("uuid")
+)
 
 var (
 	StatusOk = Status{
@@ -106,10 +109,3 @@ func (s Status) AddFileObjectInfo(obj minio.ObjectInfo) Status {
 	s.FileObjectInfo = obj
 	return s
 }
-
-type StatusError string
-
-var (
-	ErrInvalid  = StatusError("invalid")
-	ErrNotFound = StatusError("not_found")
-)

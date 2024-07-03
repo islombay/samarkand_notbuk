@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+
+	"github.com/go-playground/validator/v10"
 )
 
 var (
@@ -44,4 +46,9 @@ func IsValidPassword(s string) bool {
 	hasSpecial := regexp.MustCompile(`[:\-+_=%#@!^&<*,.]`)
 	hasLength := len(s) >= 6
 	return hasLength && hasSpecial.MatchString(s) && hasLetter.MatchString(s)
+}
+
+func UUIDValidator(fl validator.FieldLevel) bool {
+	id := fl.Field().String()
+	return IsValidUUID(id)
 }

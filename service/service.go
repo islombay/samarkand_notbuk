@@ -13,6 +13,7 @@ type ServiceInterface interface {
 	Brand() *Brand
 	Seller() *Seller
 	Files() *Files
+	Product() *Product
 }
 
 type Service struct {
@@ -26,6 +27,7 @@ type Service struct {
 	brand    *Brand
 	seller   *Seller
 	files    *Files
+	product  *Product
 }
 
 func New(storage storage.StorageInterface, log logs.LoggerInterface, cfg config.Config) ServiceInterface {
@@ -38,6 +40,7 @@ func New(storage storage.StorageInterface, log logs.LoggerInterface, cfg config.
 	srv.brand = NewBrand(storage, log)
 	srv.seller = NewSeller(storage, log)
 	srv.files = NewFiles(storage, log, cfg)
+	srv.product = NewProduct(storage, log)
 
 	srv.redis = redis
 
@@ -79,4 +82,11 @@ func (s *Service) Files() *Files {
 		s.files = NewFiles(s.storage, s.log, s.cfg)
 	}
 	return s.files
+}
+
+func (s *Service) Product() *Product {
+	if s.product == nil {
+		s.product = NewProduct(s.storage, s.log)
+	}
+	return s.product
 }

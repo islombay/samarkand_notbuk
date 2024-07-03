@@ -21,11 +21,11 @@ type CreateCategory struct {
 }
 
 type UpdateCategory struct {
-	ID       string  `json:"id" binding:"required"`
+	ID       string  `json:"id" binding:"required,uuid"`
 	NameUz   *string `json:"name" binding:"omitempty,max=30"`
-	ParentID *string `json:"parent_id"`
+	ParentID *string `json:"parent_id" binding:"omitempty,uuid"`
 }
 
 type DeleteRequest struct {
-	ID string `json:"id" binding:"required"`
+	ID string `json:"id" binding:"required,uuid"`
 }

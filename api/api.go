@@ -2,8 +2,11 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
+	"github.com/go-playground/validator/v10"
 	"github.com/islombay/noutbuk_seller/api/docs"
 	"github.com/islombay/noutbuk_seller/config"
+	"github.com/islombay/noutbuk_seller/pkg/helper"
 	"github.com/islombay/noutbuk_seller/pkg/logs"
 	"github.com/islombay/noutbuk_seller/service"
 
@@ -26,6 +29,10 @@ func NewApi(
 	docs.SwaggerInfo.Version = "1.0"
 
 	r.Use(customCORSMiddleware())
+
+	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		v.RegisterValidation("uuid", helper.UUIDValidator)
+	}
 
 	api := r.Group("/api")
 

@@ -21,6 +21,7 @@ type Storage struct {
 	brand    storage.BrandI
 	seller   storage.SellerI
 	files    storage.FilesI
+	product  storage.ProductI
 
 	db  *gorm.DB
 	log logs.LoggerInterface
@@ -45,6 +46,7 @@ func NewPostgresStore(cfg config.DBConfig, log logs.LoggerInterface) storage.Sto
 	st.brand = NewBrandRepo(db, log)
 	st.seller = NewSellerRepo(db, log)
 	st.files = NewFilesRepo(db, log)
+	st.product = NewProductRepo(db, log)
 
 	return &st
 }
@@ -70,4 +72,8 @@ func (s *Storage) Seller() storage.SellerI {
 
 func (s *Storage) Files() storage.FilesI {
 	return s.files
+}
+
+func (s *Storage) Product() storage.ProductI {
+	return s.product
 }

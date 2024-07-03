@@ -19,6 +19,7 @@ type StorageInterface interface {
 	Brand() BrandI
 	Seller() SellerI
 	Files() FilesI
+	Product() ProductI
 }
 
 type UserI interface {
@@ -60,4 +61,9 @@ type FilesI interface {
 	GetList(context.Context, models.Pagination) (*models.Pagination, error)
 	GetByID(context.Context, string) (*models.File, error)
 	Delete(ctx context.Context, id string) error
+}
+
+type ProductI interface {
+	Create(ctx context.Context, m models.CreateProduct) (*models.Product, error)
+	GetByID(ctx context.Context, id string) (*models.Product, error)
 }
