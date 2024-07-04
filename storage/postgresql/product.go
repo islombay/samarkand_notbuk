@@ -8,6 +8,7 @@ import (
 	"github.com/islombay/noutbuk_seller/pkg/logs"
 	"github.com/islombay/noutbuk_seller/storage"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 type productRepo struct {
@@ -71,7 +72,17 @@ func (db *productRepo) Create(ctx context.Context, m models.CreateProduct) (*mod
 func (db *productRepo) GetByID(ctx context.Context, id string) (*models.Product, error) {
 	var product models.Product
 
-	if err := db.db.Preload("Category").Preload("Brand").Preload("Image").Preload("Video").Preload("ProductFiles").Preload("ProductInstallments").Where("deleted_at is null").First(&product, "id = ?", id).Error; err != nil {
+	m := db.db.Session(&gorm.Session{Logger: logger.Default.LogMode(logger.Info)})
+
+	if err := m.
+		Preload("Category").
+		Preload("Brand").
+		Preload("Image").
+		Preload("Video").
+		Preload("ProductFiles").
+		Preload("ProductInstallments").
+		Where("deleted_at IS NULL AND id = ?", id).
+		First(&product).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, storage.ErrNotFound
 		}

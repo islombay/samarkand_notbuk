@@ -35,7 +35,7 @@ type ProductInstallment struct {
 	UpdatedAt time.Time  `gorm:"type:timestamp;default:now()" json:"updated_at,omitempty"`
 	DeletedAt *time.Time `gorm:"type:timestamp" json:"deleted_at,omitempty"`
 
-	Product Product `gorm:"foreignKey:ProductID;constraint:OnDelete:CASCADE" json:"product,omitempty"`
+	//Product Product `gorm:"foreignKey:ProductID;constraint:OnDelete:CASCADE" json:"product,omitempty"`
 }
 
 type ProductFile struct {
@@ -46,8 +46,8 @@ type ProductFile struct {
 	UpdatedAt time.Time  `gorm:"type:timestamp;default:now()" json:"updated_at,omitempty"`
 	DeletedAt *time.Time `gorm:"type:timestamp" json:"deleted_at,omitempty"`
 
-	Product Product `gorm:"foreignKey:ProductID;constraint:OnDelete:CASCADE" json:"product,omitempty"`
-	File    File    `gorm:"foreignKey:FileID;constraint:OnDelete:CASCADE" json:"file,omitempty"`
+	// Product Product `gorm:"foreignKey:ProductID;constraint:OnDelete:CASCADE" json:"product,omitempty"`
+	// File    File    `gorm:"foreignKey:FileID;constraint:OnDelete:CASCADE" json:"file,omitempty"`
 }
 
 type CreateProduct struct {
