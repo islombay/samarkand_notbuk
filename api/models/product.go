@@ -1,6 +1,8 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type Product struct {
 	ID          string  `gorm:"type:uuid;primaryKey;default:uuid_generate_v4()" json:"id,omitempty"`

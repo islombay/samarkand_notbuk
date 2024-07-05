@@ -21,3 +21,6 @@ build:
 install: swag-install swag build
 start:
 	./app
+
+minio:
+	minio server ~/minio/data --console-address ":9001"

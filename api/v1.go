@@ -33,8 +33,11 @@ func NewV1(
 		category.PUT("", handler.MiddlewareIsAdmin(), handler.CategoryUpdate)
 		category.GET("", handler.CategoryGetList)
 		category.GET("/:id", handler.CategoryGetByID)
+
+		v1.GET("/subcategory", handler.CategoryGetListSub)
+		v1.PUT("/subcategory", handler.MiddlewareIsAdmin(), handler.CategoryUpdate)
+		v1.DELETE("/subcategory", handler.MiddlewareIsAdmin(), handler.CategoryDelete)
 	}
-	v1.GET("/subcategory", handler.CategoryGetListSub)
 
 	brand := v1.Group("/brand")
 	{
@@ -66,6 +69,9 @@ func NewV1(
 	{
 		product.POST("", handler.MiddlewareIsAdmin(), handler.ProductCreate)
 		product.GET("/:id", handler.ProductGetByID)
+		// TODO: get list
+		// TODO: delete
+		// TODO: update
 	}
 
 	v1.GET("/ping", handler.Ping)

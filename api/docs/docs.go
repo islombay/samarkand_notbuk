@@ -1176,6 +1176,100 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update subcategory. Update only given values",
+                "tags": [
+                    "category"
+                ],
+                "summary": "Update subcategory",
+                "operationId": "SubCategoryUpdate",
+                "parameters": [
+                    {
+                        "description": "Update",
+                        "name": "category",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UpdateCategory"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Subcategory",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad id",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete subcategory",
+                "tags": [
+                    "category"
+                ],
+                "summary": "Delete subcategory",
+                "operationId": "SubcategoryDelete",
+                "parameters": [
+                    {
+                        "description": "Delete",
+                        "name": "id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.DeleteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request / Bad id",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    }
+                }
             }
         }
     },

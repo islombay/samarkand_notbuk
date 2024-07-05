@@ -168,6 +168,19 @@ func (v1 *Handler) CategoryUpdate(c *gin.Context) {
 	v1.response(c, res)
 }
 
+// @id			SubCategoryUpdate
+// @router		/api/v1/subcategory [put]
+// @description Update subcategory. Update only given values
+// @summary		Update subcategory
+// @tags		category
+// @security	ApiKeyAuth
+// @param		category	body	models.UpdateCategory	true	"Update"
+// @success		200	{object}	status.Status	"Subcategory"
+// @failure		400 {object}	status.Status	"Bad id"
+// @failure		404 {object}	status.Status	"Not found"
+// @failure		500 {object}	status.Status	"Internal server error"
+func Ignore() {}
+
 // CategoryDelete
 // @id			CategoryDelete
 // @router		/api/v1/category [delete]
@@ -197,3 +210,15 @@ func (v1 *Handler) CategoryDelete(c *gin.Context) {
 	res := v1.service.Category().Delete(ctx, m.ID)
 	v1.response(c, res)
 }
+
+// @id			SubcategoryDelete
+// @router		/api/v1/subcategory [delete]
+// @security 	ApiKeyAuth
+// @tags		category
+// @description	Delete subcategory
+// @summary		Delete subcategory
+// @param		id	body	models.DeleteRequest	true	"Delete"
+// @success		200 {object}	status.Status	"Success"
+// @failure		400	{object}	status.Status	"Bad request / Bad id"
+// @failure		500	{object}	status.Status	"Internal server error"
+func Ignore2() {}
