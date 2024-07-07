@@ -110,7 +110,6 @@ func (srv *Product) GetByID(ctx context.Context, product_id string) status.Statu
 	return status.StatusOk.AddData(product)
 }
 
-
 func (srv *Product) GetList(ctx context.Context, p models.Pagination) status.Status {
 	pagination, err := srv.storage.Product().GetList(ctx, p)
 	if err != nil {
@@ -119,7 +118,6 @@ func (srv *Product) GetList(ctx context.Context, p models.Pagination) status.Sta
 
 	return status.StatusOk.AddData(pagination.Data).AddCount(pagination.Count)
 }
-
 
 func (srv *Product) Delete(ctx context.Context, id string) status.Status {
 	if err := srv.storage.Product().Delete(ctx, id); err != nil {

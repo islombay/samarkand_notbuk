@@ -74,3 +74,4 @@ type CreateProductInstallments struct {
 	Price  float64 `json:"price" binding:"required"`
 	Period int     `json:"period" binding:"required"`
 }
+

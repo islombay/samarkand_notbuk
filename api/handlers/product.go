@@ -51,8 +51,7 @@ func (v1 *Handler) ProductCreate(c *gin.Context) {
 // @description	Get list of products
 // @summary		Get list of products
 // @tags		product
-// @param		page	query	int	false	"Page number"
-// @param		limit	query	int	false	"Page size"
+// @param		pagination	query	models.Pagination	false 	"Pagination"
 // @success		200	{object}	status.Status	"product list"
 // @failure		500	{object}	status.Status	"Internal server error"
 func (v1 *Handler) ProductGetList(c *gin.Context) {
@@ -117,3 +116,5 @@ func (v1 *Handler) ProductDelete(c *gin.Context) {
 	res := v1.service.Product().Delete(ctx, productID)
 	v1.response(c, res)
 }
+
+

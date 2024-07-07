@@ -109,7 +109,7 @@ func (db *productRepo) GetList(ctx context.Context, p models.Pagination) (*model
 		db.log.Error("could not get the count of product", logs.Error(res.Error))
 	}
 
-	if res := tx.Limit(p.Limit).Offset(p.Offset).Order("created_at desc").Find(&products); res.Error != nil {
+	if res := tx.Limit(p.Limit).Offset(p.Offset).Preload("Image").Preload("Video").Order("created_at desc").Find(&products); res.Error != nil {
 		db.log.Error("could not get product list", logs.Error(res.Error))
 		return nil, res.Error
 	}
