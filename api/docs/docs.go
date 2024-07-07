@@ -799,6 +799,42 @@ const docTemplate = `{
             }
         },
         "/api/v1/product": {
+            "get": {
+                "description": "Get list of products",
+                "tags": [
+                    "product"
+                ],
+                "summary": "Get list of products",
+                "operationId": "ProductGetList",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page size",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "product list",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -928,44 +964,6 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not found",
-                        "schema": {
-                            "$ref": "#/definitions/status.Status"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/status.Status"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/products": {
-            "get": {
-                "description": "Get list of products",
-                "tags": [
-                    "product"
-                ],
-                "summary": "Get list of products",
-                "operationId": "ProductGetList",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Page number",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Page size",
-                        "name": "limit",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "product list",
                         "schema": {
                             "$ref": "#/definitions/status.Status"
                         }

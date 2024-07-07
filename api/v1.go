@@ -65,7 +65,7 @@ func NewV1(
 		files.DELETE("", handler.MiddlewareIsAdmin(), handler.FileDelete)
 	}
 
-	product := v1.Group("/products")
+	product := v1.Group("/product")
 	{
 		product.POST("", handler.MiddlewareIsAdmin(), handler.ProductCreate)
 		product.DELETE("", handler.MiddlewareIsAdmin(), handler.ProductDelete)

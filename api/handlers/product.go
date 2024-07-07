@@ -45,6 +45,29 @@ func (v1 *Handler) ProductCreate(c *gin.Context) {
 	v1.response(c, res)
 }
 
+// ProductGetList handles fetching a list of products with pagination.
+// @id			ProductGetList
+// @router		/api/v1/product [get]
+// @description	Get list of products
+// @summary		Get list of products
+// @tags		product
+// @param		page	query	int	false	"Page number"
+// @param		limit	query	int	false	"Page size"
+// @success		200	{object}	status.Status	"product list"
+// @failure		500	{object}	status.Status	"Internal server error"
+func (v1 *Handler) ProductGetList(c *gin.Context) {
+	var pagination models.Pagination
+	c.ShouldBind(&pagination)
+
+	pagination.Fix()
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+
+	res := v1.service.Product().GetList(ctx, pagination)
+	v1.response(c, res)
+}
+
 // ProductGetByID handles fetching a product by its ID.
 // @id			ProductGetByID
 // @router		/api/v1/product/{id} [get]
@@ -67,29 +90,6 @@ func (v1 *Handler) ProductGetByID(c *gin.Context) {
 	defer cancel()
 
 	res := v1.service.Product().GetByID(ctx, productID)
-	v1.response(c, res)
-}
-
-// ProductGetList handles fetching a list of products with pagination.
-// @id			ProductGetList
-// @router		/api/v1/products [get]
-// @description	Get list of products
-// @summary		Get list of products
-// @tags		product
-// @param		page	query	int	false	"Page number"
-// @param		limit	query	int	false	"Page size"
-// @success		200	{object}	status.Status	"product list"
-// @failure		500	{object}	status.Status	"Internal server error"
-func (v1 *Handler) ProductGetList(c *gin.Context) {
-	var pagination models.Pagination
-	c.ShouldBind(&pagination)
-
-	pagination.Fix()
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
-	defer cancel()
-
-	res := v1.service.Product().GetList(ctx, pagination)
 	v1.response(c, res)
 }
 
