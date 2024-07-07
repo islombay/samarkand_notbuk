@@ -65,5 +65,7 @@ type FilesI interface {
 
 type ProductI interface {
 	Create(ctx context.Context, m models.CreateProduct) (*models.Product, error)
+	GetList(context.Context, models.Pagination) (*models.Pagination, error)
 	GetByID(ctx context.Context, id string) (*models.Product, error)
+	Delete(ctx context.Context, id string) error
 }

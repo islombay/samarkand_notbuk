@@ -22,8 +22,8 @@ func NewCategoryRepo(db *gorm.DB, log logs.LoggerInterface) storage.CategoryI {
 
 func (db *categoryRepo) Create(ctx context.Context, m models.CreateCategory) (*models.Category, error) {
 	cat := models.Category{
-		NameUz:   m.NameUz,
-		ParentID: m.ParentID,
+		NameUz: m.NameUz,
+		// ParentID: m.ParentID,
 	}
 
 	result := db.db.Select("name_uz", "parent_id").Create(&cat)

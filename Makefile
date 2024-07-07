@@ -10,7 +10,7 @@ run-server:
 	go run cmd/main.go
 
 db:
-	psql -U postgres -W -h localhost -p 5432 -d samarkand_notbuk_sayt;
+	psql -U new -W -h localhost -p 5432 -d samarkand_notbuk_sayt;
 
 run: swag run-server
 build:

@@ -65,12 +65,12 @@ func NewV1(
 		files.DELETE("", handler.MiddlewareIsAdmin(), handler.FileDelete)
 	}
 
-	product := v1.Group("/product")
+	product := v1.Group("/products")
 	{
 		product.POST("", handler.MiddlewareIsAdmin(), handler.ProductCreate)
+		product.DELETE("", handler.MiddlewareIsAdmin(), handler.ProductDelete)
+		product.GET("", handler.ProductGetList)
 		product.GET("/:id", handler.ProductGetByID)
-		// TODO: get list
-		// TODO: delete
 		// TODO: update
 	}
 

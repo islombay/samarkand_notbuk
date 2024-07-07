@@ -3,6 +3,7 @@ package postgresql
 import (
 	"context"
 	"errors"
+	"time"
 
 	"github.com/islombay/noutbuk_seller/api/models"
 	"github.com/islombay/noutbuk_seller/pkg/logs"
@@ -91,4 +92,38 @@ func (db *productRepo) GetByID(ctx context.Context, id string) (*models.Product,
 	}
 
 	return &product, nil
+}
+
+func (db *productRepo) GetList(ctx context.Context, p models.Pagination) (*models.Pagination, error) {
+	var products []models.Product
+
+	var tx *gorm.DB = db.db.Where("deleted_at is null")
+
+	if p.Query != "" {
+		tx = tx.Where("name ilike ?", "%"+p.Query+"%")
+	}
+
+	p.Count = 0
+
+	if res := tx.Model(&models.Product{}).Count(&p.Count); res.Error != nil {
+		db.log.Error("could not get the count of product", logs.Error(res.Error))
+	}
+
+	if res := tx.Limit(p.Limit).Offset(p.Offset).Order("created_at desc").Find(&products); res.Error != nil {
+		db.log.Error("could not get product list", logs.Error(res.Error))
+		return nil, res.Error
+	}
+	p.Data = products
+
+	return &p, nil
+}
+
+func (db *productRepo) Delete(ctx context.Context, id string) error {
+	err := db.db.Model(&models.Product{ID: id}).Where("deleted_at is null").Update("deleted_at", time.Now()).Error
+	if err != nil {
+		db.log.Error("could not delete product", logs.Error(err))
+		return err
+	}
+
+	return nil
 }

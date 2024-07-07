@@ -845,7 +845,7 @@ const docTemplate = `{
                         }
                     },
                     "500": {
-                        "description": "Internel server error",
+                        "description": "Internal server error",
                         "schema": {
                             "$ref": "#/definitions/status.Status"
                         }
@@ -885,6 +885,87 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete product by id",
+                "tags": [
+                    "product"
+                ],
+                "summary": "Delete product by id",
+                "operationId": "ProductDelete",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "product id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "product deleted",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid id",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/status.Status"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/products": {
+            "get": {
+                "description": "Get list of products",
+                "tags": [
+                    "product"
+                ],
+                "summary": "Get list of products",
+                "operationId": "ProductGetList",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page size",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "product list",
                         "schema": {
                             "$ref": "#/definitions/status.Status"
                         }
