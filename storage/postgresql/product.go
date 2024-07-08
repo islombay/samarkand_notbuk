@@ -76,12 +76,12 @@ func (db *productRepo) GetByID(ctx context.Context, id string) (*models.Product,
 	m := db.db.Session(&gorm.Session{Logger: logger.Default.LogMode(logger.Info)})
 
 	if err := m.
-		Preload("Category").
-		Preload("Brand").
-		Preload("Image").
-		Preload("Video").
-		Preload("ProductFiles").
-		Preload("ProductInstallments").
+		Preload("Category", "deleted_at is null").
+		Preload("Brand", "deleted_at is null").
+		Preload("Image", "deleted_at is null").
+		Preload("Video", "deleted_at is null").
+		Preload("ProductFiles", "product_id = ? and deleted_at is null", id).
+		Preload("ProductInstallments", "product_id = ? and deleted_at is null", id).
 		Where("deleted_at IS NULL AND id = ?", id).
 		First(&product).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

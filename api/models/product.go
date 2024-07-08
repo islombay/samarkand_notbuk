@@ -43,6 +43,7 @@ type ProductInstallment struct {
 type ProductFile struct {
 	ProductID string `gorm:"type:uuid;not null" json:"product_id,omitempty"`
 	FileID    string `gorm:"type:uuid;not null" json:"file_id,omitempty"`
+	FileURL   string `gorm:"-"`
 
 	CreatedAt time.Time  `gorm:"type:timestamp;default:now()" json:"created_at,omitempty"`
 	UpdatedAt time.Time  `gorm:"type:timestamp;default:now()" json:"updated_at,omitempty"`
@@ -74,4 +75,3 @@ type CreateProductInstallments struct {
 	Price  float64 `json:"price" binding:"required"`
 	Period int     `json:"period" binding:"required"`
 }
-
