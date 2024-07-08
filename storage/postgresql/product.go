@@ -45,9 +45,13 @@ func (db *productRepo) Create(ctx context.Context, m models.CreateProduct) (*mod
 				FileID:    file.FileID,
 			}
 			if err := tx.Create((&productFile)).Error; err != nil {
-				db.log.Error("could not create product file", logs.Error(err))
-				tx.Rollback()
-				return err
+				if errors.Is(err, gorm.ErrDuplicatedKey) {
+					return storage.ErrDuplicateProductFile
+				} else {
+					db.log.Error("could not create product file", logs.Error(err))
+					tx.Rollback()
+					return err
+				}
 			}
 		}
 
@@ -58,6 +62,9 @@ func (db *productRepo) Create(ctx context.Context, m models.CreateProduct) (*mod
 				Period:    installment.Period,
 			}
 			if err := tx.Create(&productInstallment).Error; err != nil {
+				if errors.Is(err, gorm.ErrDuplicatedKey) {
+					return storage.ErrDuplicateProductInstallment
+				}
 				db.log.Error("could not create product installment", logs.Error(err))
 				tx.Rollback()
 				return err

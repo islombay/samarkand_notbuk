@@ -2,6 +2,7 @@ package storage
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/islombay/noutbuk_seller/api/models"
@@ -10,6 +11,10 @@ import (
 var (
 	ErrNotFound      = fmt.Errorf("err_not_found")
 	ErrAlreadyExists = fmt.Errorf("already_exists")
+
+	// Product
+	ErrDuplicateProductFile        = errors.New("duplicate_product_file")
+	ErrDuplicateProductInstallment = errors.New("duplicate_product_installment")
 )
 
 type StorageInterface interface {

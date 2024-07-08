@@ -92,6 +92,11 @@ func (srv *Product) Create(ctx context.Context, m models.CreateProduct) status.S
 
 	product, err := srv.storage.Product().Create(ctx, m)
 	if err != nil {
+		if errors.Is(err, storage.ErrDuplicateProductFile) {
+			return status.StatusAlreadyExists.AddError("files", status.ErrDuplicate)
+		} else if errors.Is(err, storage.ErrDuplicateProductInstallment) {
+			return status.StatusAlreadyExists.AddError("installments", status.ErrDuplicate)
+		}
 		return status.StatusInternal
 	}
 

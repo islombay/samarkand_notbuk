@@ -20,10 +20,11 @@ type Status struct {
 type StatusError string
 
 var (
-	ErrInvalid  = StatusError("invalid")
-	ErrNotFound = StatusError("not_found")
-	ErrBadValue = StatusError("bad_value")
-	ErrUUID     = StatusError("uuid")
+	ErrInvalid   = StatusError("invalid")
+	ErrNotFound  = StatusError("not_found")
+	ErrBadValue  = StatusError("bad_value")
+	ErrUUID      = StatusError("uuid")
+	ErrDuplicate = StatusError("duplicate")
 )
 
 var (
