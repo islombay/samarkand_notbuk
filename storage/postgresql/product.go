@@ -76,12 +76,8 @@ func (db *productRepo) GetByID(ctx context.Context, id string) (*models.Product,
 	m := db.db.Session(&gorm.Session{Logger: logger.Default.LogMode(logger.Info)})
 
 	if err := m.
-		Preload("Category", "deleted_at is null").
-		Preload("Brand", "deleted_at is null").
 		Preload("Image", "deleted_at is null").
 		Preload("Video", "deleted_at is null").
-		Preload("ProductFiles", "product_id = ? and deleted_at is null", id).
-		Preload("ProductInstallments", "product_id = ? and deleted_at is null", id).
 		Where("deleted_at IS NULL AND id = ?", id).
 		First(&product).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -132,4 +128,43 @@ func (db *productRepo) Delete(ctx context.Context, id string) error {
 	}
 
 	return nil
+}
+
+// GetFilesByID get list of files for specific product
+func (db *productRepo) GetFilesByID(ctx context.Context, id string) ([]models.ProductFile, error) {
+	var files []models.ProductFile
+
+	if err := db.db.
+		WithContext(ctx).
+		Joins("join products on products.id = product_files.product_id and products.deleted_at is null").
+		Joins("join files on product_files.file_id = files.id and files.deleted_at is null").
+		Where("product_files.product_id = ? and product_files.deleted_at is null", id).
+		Select("product_files.file_id", "files.file_url", "product_files.created_at", "product_files.updated_at").
+		Find(&files).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, storage.ErrNotFound
+		}
+		db.log.Error("could not find files of product", logs.Error(err), logs.String("product_id", id))
+		return nil, err
+	}
+	return files, nil
+}
+
+// GetInstallmentsByID get list of installments for specific product
+func (db *productRepo) GetInstallmentsByID(ctx context.Context, id string) ([]models.ProductInstallment, error) {
+	var installments []models.ProductInstallment
+
+	if err := db.db.
+		WithContext(ctx).
+		Joins("join products on products.id = product_installments.product_id and products.deleted_at is null").
+		Where("product_installments.product_id = ? and product_installments.deleted_at is null", id).
+		Select("product_installments.period", "product_installments.price", "product_installments.created_at", "product_installments.updated_at").
+		Find(&installments).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, storage.ErrNotFound
+		}
+		db.log.Error("could not find installments of product", logs.Error(err), logs.String("product_id", id))
+		return nil, err
+	}
+	return installments, nil
 }

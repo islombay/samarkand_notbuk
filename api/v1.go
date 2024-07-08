@@ -71,7 +71,8 @@ func NewV1(
 		product.DELETE("", handler.MiddlewareIsAdmin(), handler.ProductDelete)
 		product.GET("", handler.ProductGetList)
 		product.GET("/:id", handler.ProductGetByID)
-		// TODO: update
+		product.GET("/:id/files", handler.ProductFilesByID)
+		product.GET("/:id/installments", handler.ProductInstallmentsByID)
 	}
 
 	v1.GET("/ping", handler.Ping)

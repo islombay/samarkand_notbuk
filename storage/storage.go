@@ -68,4 +68,7 @@ type ProductI interface {
 	GetList(context.Context, models.Pagination) (*models.Pagination, error)
 	GetByID(ctx context.Context, id string) (*models.Product, error)
 	Delete(ctx context.Context, id string) error
+
+	GetFilesByID(ctx context.Context, id string) ([]models.ProductFile, error)
+	GetInstallmentsByID(ctx context.Context, id string) ([]models.ProductInstallment, error)
 }

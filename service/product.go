@@ -126,3 +126,27 @@ func (srv *Product) Delete(ctx context.Context, id string) status.Status {
 
 	return status.StatusOk
 }
+
+func (srv *Product) GetFilesByID(ctx context.Context, id string) status.Status {
+	files, err := srv.storage.Product().GetFilesByID(ctx, id)
+	if err != nil {
+		if errors.Is(err, storage.ErrNotFound) {
+			return status.StatusNotFound
+		}
+		return status.StatusInternal
+	}
+
+	return status.StatusOk.AddData(files)
+}
+
+func (srv *Product) GetInstallmentsByID(ctx context.Context, id string) status.Status {
+	installments, err := srv.storage.Product().GetInstallmentsByID(ctx, id)
+	if err != nil {
+		if errors.Is(err, storage.ErrNotFound) {
+			return status.StatusNotFound
+		}
+		return status.StatusInternal
+	}
+
+	return status.StatusOk.AddData(installments)
+}

@@ -117,4 +117,52 @@ func (v1 *Handler) ProductDelete(c *gin.Context) {
 	v1.response(c, res)
 }
 
+// ProductFilesByID get product files
+// @id			ProductFilesByID
+// @router		/api/v1/product/{id}/files [get]
+// @description	Get product files
+// @summary		Get product files
+// @tags		product
+// @param		id	path	string	true	"product id"
+// @success		200	{object}	status.Status	"product files"
+// @failure		400	{object}	status.Status	"Invalid id"
+// @failure		404	{object}	status.Status	"Not found"
+// @failure 	500 {object}	status.Status	"Internal server error"
+func (v1 *Handler) ProductFilesByID(c *gin.Context) {
+	productID := c.Param("id")
+	if !helper.IsValidUUID(productID) {
+		v1.response(c, status.StatusBadID)
+		return
+	}
 
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+
+	res := v1.service.Product().GetFilesByID(ctx, productID)
+	v1.response(c, res)
+}
+
+// ProductInstallmentsByID get product installments
+// @id			ProductInstallmentsByID
+// @router		/api/v1/product/{id}/installments [get]
+// @description	Get product installments
+// @summary		Get product installments
+// @tags		product
+// @param		id	path	string	true	"product id"
+// @success		200	{object}	status.Status	"product installments"
+// @failure		400	{object}	status.Status	"Invalid id"
+// @failure		404	{object}	status.Status	"Not found"
+// @failure 	500 {object}	status.Status	"Internal server error"
+func (v1 *Handler) ProductInstallmentsByID(c *gin.Context) {
+	productID := c.Param("id")
+	if !helper.IsValidUUID(productID) {
+		v1.response(c, status.StatusBadID)
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+
+	res := v1.service.Product().GetInstallmentsByID(ctx, productID)
+	v1.response(c, res)
+}
