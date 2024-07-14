@@ -159,6 +159,16 @@ const docTemplate = `{
                 "operationId": "BrandGetList",
                 "parameters": [
                     {
+                        "type": "string",
+                        "name": "brand_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "category_id",
+                        "in": "query"
+                    },
+                    {
                         "type": "integer",
                         "name": "limit",
                         "in": "query"
@@ -391,6 +401,16 @@ const docTemplate = `{
                 "summary": "Get category list",
                 "operationId": "CategoryGetList",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "name": "brand_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "category_id",
+                        "in": "query"
+                    },
                     {
                         "type": "integer",
                         "name": "limit",
@@ -631,6 +651,16 @@ const docTemplate = `{
                 "operationId": "FileGetList",
                 "parameters": [
                     {
+                        "type": "string",
+                        "name": "brand_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "category_id",
+                        "in": "query"
+                    },
+                    {
                         "type": "integer",
                         "name": "limit",
                         "in": "query"
@@ -807,6 +837,16 @@ const docTemplate = `{
                 "summary": "Get list of products",
                 "operationId": "ProductGetList",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "name": "brand_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "category_id",
+                        "in": "query"
+                    },
                     {
                         "type": "integer",
                         "name": "limit",
@@ -1080,6 +1120,16 @@ const docTemplate = `{
                 "operationId": "SellerGetList",
                 "parameters": [
                     {
+                        "type": "string",
+                        "name": "brand_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "category_id",
+                        "in": "query"
+                    },
+                    {
                         "type": "integer",
                         "name": "limit",
                         "in": "query"
@@ -1312,6 +1362,16 @@ const docTemplate = `{
                 "summary": "Get subcategory list",
                 "operationId": "CategoryGetListSub",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "name": "brand_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "category_id",
+                        "in": "query"
+                    },
                     {
                         "type": "integer",
                         "name": "limit",

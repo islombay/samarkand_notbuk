@@ -170,6 +170,8 @@ func (srv *Auth) Login(ctx context.Context, req models.LoginClient) status.Statu
 	return status.StatusOk.AddData(
 		map[string]string{
 			"request_id": redisCode.RequestID,
+			// TODO: remove this line for the future, when OTP is implemented
+			"code": redisCode.Code,
 		},
 	)
 }

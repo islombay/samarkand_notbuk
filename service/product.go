@@ -112,6 +112,11 @@ func (srv *Product) GetByID(ctx context.Context, product_id string) status.Statu
 		return status.StatusInternal
 	}
 
+	product.ProductFiles, err = srv.storage.Product().GetFilesByID(ctx, product_id)
+	// even if any error return product itself
+
+	product.ProductInstallments, err = srv.storage.Product().GetInstallmentsByID(ctx, product_id)
+
 	return status.StatusOk.AddData(product)
 }
 

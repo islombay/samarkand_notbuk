@@ -106,6 +106,19 @@ func (db *productRepo) GetList(ctx context.Context, p models.Pagination) (*model
 		tx = tx.Where("name ilike ?", "%"+p.Query+"%")
 	}
 
+	if p.CategoryID != "" {
+		subQuery := db.db.Model(&models.Category{}).
+			Select("id").
+			Where("parent_id = ? or id = ?", p.CategoryID, p.CategoryID).
+			Where("deleted_at is null")
+
+		tx = tx.Where("category_id in (?)", subQuery)
+	}
+
+	if p.BrandID != "" {
+		tx = tx.Where("brand_id = ?", p.BrandID)
+	}
+
 	p.Count = 0
 
 	if res := tx.Model(&models.Product{}).Count(&p.Count); res.Error != nil {

@@ -3,6 +3,7 @@
 api/docs/swagger.json
 api/docs/swagger.yaml
 app
+TODO.txt
 
 dump.rdb
 mocks

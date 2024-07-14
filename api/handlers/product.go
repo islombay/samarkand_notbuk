@@ -56,7 +56,10 @@ func (v1 *Handler) ProductCreate(c *gin.Context) {
 // @failure		500	{object}	status.Status	"Internal server error"
 func (v1 *Handler) ProductGetList(c *gin.Context) {
 	var pagination models.Pagination
-	c.ShouldBind(&pagination)
+	if err := c.Bind(&pagination); err != nil {
+		v1.ValidateError(c, err, pagination)
+		return
+	}
 
 	pagination.Fix()
 
